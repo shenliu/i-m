@@ -1,0 +1,491 @@
+@charset "utf-8";
+
+/* user头像框架 */
+.chat_avatar_area {
+    float: left;
+    height: 26px;
+    width: 26px;
+}
+
+/* 头像 */
+.chat_avatar {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #cacaca;
+    display: block;
+    float: left;
+    height: 24px;
+    overflow: hidden;
+    padding: 1px;
+    position: static;
+    width: 24px;
+}
+
+/* user状态 */
+.chat_user_state {
+    display: block;
+    float: left;
+    height: 10px;
+    margin: -15px 0 0 16px;
+    _margin: -15px 0 0 8px;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 10px;
+}
+
+/* 用户名字区域 */
+.chat_userinfo_area {
+    height: 26px;
+    line-height: 26px;
+    float: left;
+    overflow: hidden;
+    margin-left: 5px;
+}
+
+.chat_username {
+    display: block;
+    float: left;
+    height: 24px;
+    line-height: 24px;
+    font-size: 15px;
+    display: inline;
+}
+
+.chat_username span {
+    line-height: 24px;
+    font-size: 13px;
+}
+
+.chat_user_sign_area {
+    height: 24px;
+    line-height: 24px;
+    overflow: hidden;
+    display: inline;
+}
+
+.chat_user_sign_area span {
+    line-height: 24px;
+    font-size: .75em;
+}
+
+/******** chat window 主体 ********/
+
+.chat_body_sidebar_2 {
+    background: url("../arrow_right_small.png") no-repeat scroll -5px center #edf0f2;
+    border-left: 1px solid #a1b4b0;
+    border-right: 1px solid #a1b4b0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 143px;
+    cursor: pointer;
+    font-size: 0;
+    width: 5px;
+    height: 100%;
+    line-height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    text-indent: -9999px;
+    z-index: 6005;
+}
+
+.chat_body_sidebar {
+    border-left: 0px solid #999999;
+    background-color: #f5f5f5;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 150px;
+    z-index: 6000;
+}
+
+.chat_body_main_area {
+    background: none repeat scroll 0 0 transparent;
+    height: 100%;
+    margin: 0 2px 0 0;
+    position: relative;
+    _background-color: #f5f5f5;
+}
+
+/* 对话板 框架 */
+.chat_body_chatboard {
+    border-color: #999999;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    bottom: 143px;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    _height: 100%;
+
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+}
+
+/* 对话列表 */
+.chat_body_msglist {
+    background: none repeat scroll 0 0 #f5f5f5;
+    bottom: 0;
+    display: block;
+    margin: 0 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+/* 自己发出的话 <dl> */
+.chat_body_msglist_mymsg {
+    display: block;
+    margin: 0;
+    padding: 5px;
+}
+
+/* 别人发出的话 <dl> */
+.chat_body_msglist_buddymsg {
+    display: block;
+    margin: 0;
+    padding: 5px;
+}
+
+/* 标题: 名称 时间 <dt> */
+.chat_body_msglist_mymsg .msgHead,
+    .chat_body_msglist_buddymsg .msgHead {
+    font: 12px/1.5 tahoma,helvetica,clean,sans-serif;
+    color: #008000;
+    overflow: hidden;
+}
+
+.chat_body_msglist_buddymsg .msgHead {
+    color: #0000ff;
+}
+
+/* 聊天内容 <dd> */
+.chat_body_msglist_mymsg .msgBody,
+    .chat_body_msglist_buddymsg .msgBody {
+    color: #000000;
+    margin: 0 0 0 13px;
+    word-wrap: break-word;
+}
+
+.chat_body_msglist_buddymsg .defaultFontStyle,
+    .chat_body_msglist_mymsg .defaultFontStyle {
+    color: #000000;
+    font-family: \4EFF\5B8B;    /* 仿宋 */
+    font-size: 10pt;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+/* 发送空字符串 警告栏 */
+.chat_body_emptystring_tip {
+    background: none repeat scroll 0 0 #ffffcc;
+    border-top: 1px solid #cccccc;
+    bottom: 0;
+    left: 0;
+    color: #000000;
+    display: none;
+    height: 24px;
+    line-height: 24px;
+    overflow: hidden;
+    padding-left: 6px;
+    position: absolute;
+    width: 100%;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* 编辑工具条 */
+.chat_body_editor_toolbar {
+    background: url("../editor_bar_bg.gif") repeat-x scroll 0 0 transparent;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    bottom: 143px;
+    display: none;
+    height: 23px;
+    padding: 3px 0 3px;
+    position: absolute;
+    width: 100%;
+}
+
+.chat_body_editor_toolbar ul, .chat_body_editor_toolbar li {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat_body_editor_toolbar ul.toolbar li {
+    margin: 0 1px;
+}
+
+/* 字体列表 */
+.chat_body_editor_toolbar select.fontFamily {
+    border: 1px solid #6a9ed2;
+    width: 130px;
+    font-size: 13px;
+}
+
+/* 字体大小列表 */
+.chat_body_editor_toolbar select.fontSize {
+    border: 1px solid #6a9ed2;
+    width: 50px;
+    font-size: 13px;
+}
+
+.chat_body_editor_toolbar a.selected {
+    background-color: #9bc4ea;
+    border: 1px solid #7995b2;
+}
+
+.chat_body_editor_toolbar a.icon {
+    border: 1px solid #ffffff;
+    display: inline-block;
+    height: 15px;
+    outline: 0 none;
+    padding: 1px;
+    width: 15px;
+    margin-top: 2px;
+}
+
+.chat_body_editor_toolbar a.icon:hover {
+    background-color: #9bc4ea;
+    border: 1px solid #7995b2;
+}
+
+.chat_body_editor_toolbar a.icon span {
+    display: inline-block;
+    overflow: hidden;
+    height: 15px;
+    width: 15px;
+}
+
+.chat_body_editor_toolbar a.icon:hover span {
+    cursor: pointer;
+}
+
+/* 粗体 */
+.chat_body_editor_toolbar .bold {
+    background: url("../sprite.png") no-repeat scroll -2px -43px transparent;
+}
+
+/* 斜体 */
+.chat_body_editor_toolbar .italic {
+    background: url("../sprite.png") no-repeat scroll -42px -43px transparent;
+}
+
+/* 下划线 */
+.chat_body_editor_toolbar .underline {
+    background: url("../sprite.png") no-repeat scroll -22px -43px transparent;
+}
+
+/* 颜色板 按钮 */
+.chat_body_editor_toolbar .color {
+    background: url("../sprite.png") no-repeat scroll -63px -43px transparent;
+}
+
+/* 颜色板 */
+.chat_body_editor_toolbar .colorPanel {
+    background: none repeat scroll 0 0 #ffffff;
+    border-color: #b2b2b2 #9bc4ea #9bc4ea #b2b2b2;
+    border-style: solid;
+    border-width: 1px;
+    bottom: 22px;
+    _bottom: 25px;
+    clear: left;
+    display: none;
+    left: 248px;
+    _left: 125px;
+    padding: 5px;
+    position: absolute;
+    width: 130px;
+    z-index: 6500;
+}
+
+.chat_body_editor_toolbar ul li {
+    float: left;
+}
+
+.chat_body_editor_toolbar .colorPanel a {
+    border: 1px solid #ffffff;
+    display: inline-block;
+    font-size: 1px;
+    outline: 0 none;
+    padding: 1px;
+}
+
+.chat_body_editor_toolbar .colorPanel a:hover {
+    border: 1px solid #000000;
+}
+
+.chat_body_editor_toolbar .colorPanel a span {
+    border: 1px solid #a6a6a6;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1px;
+    height: 10px;
+    width: 10px;
+}
+
+/* 上下拖拽条 */
+.chat_body_toolbar_top {
+    background: url("../down_bar.gif") repeat-x scroll 0 0 transparent;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    bottom: 138px;
+    cursor: n-resize;
+    font-size: 0;
+    height: 5px;
+    left: 0;
+    line-height: 5px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: absolute;
+    text-indent: -9999px;
+    width: 100%;
+}
+
+/* 字体 表情 etc. 栏 */
+.chat_body_toolbar {
+    background: url("../down_bar.gif") repeat-x scroll 0 -2px transparent;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    bottom: 115px;
+    height: 23px;
+    left: 0;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1px 0;
+    position: absolute;
+    width: 100%;
+}
+
+/* 字体 */
+.chat_body_toolbar_font_button {
+    background: url("../sprite.png") no-repeat scroll 0 -60px transparent;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 20px;
+    margin: 0 4px;
+    width: 20px;
+}
+
+/* 表情 */
+.chat_body_toolbar_face_button {
+    background: url("../sprite.png") no-repeat scroll -20px -60px transparent;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 20px;
+    margin: 0 4px;
+    width: 20px;
+}
+
+/* 历史记录 */
+.chat_body_toolbar_history_button {
+    background: url("../sprite.png") no-repeat scroll -100px -60px transparent;
+    cursor: pointer;
+    display: inline;
+    float: right;
+    height: 20px;
+    margin: 0 4px;
+    width: 20px;
+}
+
+/* 输入框 */
+.chat_body_inputbox {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+
+    background: url("../input_bg.gif") no-repeat scroll -1px -1px #f5f5f5;
+    border-color: #777777 #aaaaaa #aaaaaa #777777;
+    border-right: 1px solid #aaaaaa;
+    border-style: solid;
+    border-width: 1px;
+    bottom: 28px;
+    display: block;
+    font-size: 12px;
+    height: 85px;
+    left: 0;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1px 0;
+    position: absolute;
+    width: 100%;
+}
+
+.chat_body_inputbox_rich_editor {
+    color: #000000;
+    font-family: \5B8B\4F53;
+    font-size: 10pt;
+    font-style: normal;
+    font-weight: normal;
+    height: 100%;
+    line-height: 100%;
+    margin-left: 3px;
+    text-decoration: none;
+}
+
+.chat_body_inputbox_rich_editor_div, .chat_body_inputbox_rich_editor_text {
+    border: medium none;
+    display: block;
+    height: 100%;
+    line-height: 100%;
+    margin: 0;
+    outline: medium none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0;
+    word-wrap: break-word;
+}
+
+.chat_body_inputbox_rich_editor_text {
+    display: none;
+}
+
+/* 关闭 发送 框 */
+.chat_body_control_panel {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    left: 2px;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+
+.chat_body_control_panel_sendmsg_button {
+    background: url("../all.png") no-repeat scroll 0 -220px transparent;
+    cursor: pointer;
+    float: right;
+    height: 23px;
+    line-height: 23px;
+    overflow: hidden;
+    text-align: center;
+    width: 66px;
+    padding-right: 4px;
+}
+
+.chat_body_control_panel_close_button {
+    background: url("../all.png") no-repeat scroll 0 -220px transparent;
+    cursor: pointer;
+    float: right;
+    height: 23px;
+    line-height: 23px;
+    margin: 0 5px 0 0;
+    overflow: hidden;
+    text-align: center;
+    width: 66px;
+}

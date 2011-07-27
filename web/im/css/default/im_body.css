@@ -1,0 +1,299 @@
+@charset "utf-8";
+
+/* 内容主体 边框 */
+.im_window_body_outer {
+    border: 1px solid #a1b4b0;
+    bottom: 0;
+    position: absolute;
+    top: 28px;
+    width: 100%;
+}
+
+/* 主体 */
+.win_body {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    _height: 100%;
+}
+
+/* 我的面板 */
+.my_panel {
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 我的头像 */
+.my_panel_avatar img {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #999999;
+    box-shadow: 1px 1px 3px #666666;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 40px;
+    overflow: hidden;
+    padding: 1px;
+    position: relative;
+    width: 40px;
+}
+
+/* 我的信息 */
+.my_panel_info {
+    height: 16px;
+    margin: 3px 0 0 52px;
+    overflow: hidden;
+}
+
+/* 我的信息 当前状态 */
+.my_panel_info_state {
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 16px;
+    overflow: hidden;
+    width: 30px;
+}
+
+/* 当前状态 */
+.state_online {
+    background: url("../sprite_button.gif") no-repeat scroll 1px 3px transparent;
+}
+
+.state_away {
+    background: url("../sprite_button.gif") no-repeat scroll -17px 3px transparent;
+}
+
+.state_silent {
+    background: url("../sprite_button.gif") no-repeat scroll -107px 3px transparent;
+}
+
+.state_busy {
+    background: url("../sprite_button.gif") no-repeat scroll -35px 3px transparent;
+}
+
+.state_hidden {
+    background: url("../sprite_button.gif") no-repeat scroll -53px 3px transparent;
+}
+
+.state_offline {
+    background: url("../sprite_button.gif") no-repeat scroll -90px 3px transparent;
+}
+
+.my_panel_info_state_show {
+    float: left;
+    height: 16px;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 15px;
+}
+
+.my_panel_info_state_down {
+    background: url("../sprite_button.gif") no-repeat scroll 0 -22px transparent;
+    float: left;
+    height: 6px;
+    margin-top: 5px;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 7px;
+}
+
+/* 我的信息 别名 */
+.my_panel_info_nickname {
+    color: #030303;
+    cursor: default;
+    float: left;
+    font-weight: bold;
+    height: 16px;
+    line-height: 16px;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+/* 我的信息 服务 */
+.my_panel_service {
+    float: left;
+    height: 22px;
+    margin: 3px 0 0 8px;
+    width: 77%;
+}
+
+/* 我的信息 服务 我的签名框 */
+.my_panel_signature_wraper {
+    color: #000000;
+    height: 20px;
+    left: 1px;
+    margin: 1px 0 0;
+    overflow: hidden;
+    position: relative;
+    top: 1px;
+}
+
+/* 我的信息 服务 我的签名 */
+.my_panel_signature {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    cursor: pointer;
+    display: block;
+    height: 18px;
+    line-height: 18px;
+    margin: 1px 1px 0;
+    outline: medium none;
+    width: 100%;
+    font-size: 12px;
+    color: #808080;
+}
+
+/* 我的工具面板 */
+.my_toolbar {
+    height: 20px;
+    margin: 2px 0 4px;
+    display: none;
+}
+
+/* 我的主面板 */
+.my_mainPanel {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #a1b4b0;
+    overflow: hidden;
+    position: relative important;
+}
+
+/* 搜索好友栏 */
+.main_searchBar {
+    display: block;
+    height: 26px;
+    margin: 0;
+    overflow: hidden;
+}
+
+input.main_search_input {
+    border: 0 solid #cccccc;
+    color: #999999;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    margin: 0;
+    overflow: hidden;
+    padding: 5px 2px;
+    width: 100%;
+}
+
+.main_search_bt {
+    background: url("../sprite.png") no-repeat scroll -122px -82px transparent;
+    cursor: pointer;
+    display: inline;
+    float: right;
+    height: 16px;
+    margin: -21px 2px 0 0;
+    overflow: hidden;
+    position: relative;
+    text-indent: -999em;
+    width: 16px;
+}
+
+/* 联系人 群 最近联系人 tab栏 */
+.main_tab {
+    float: left;
+    height: 26px;
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.main_tab .main_tab_current {
+    background: url("../sprite_line_current.gif") repeat-x scroll 0 0 transparent;
+    cursor: default;
+}
+
+.main_tab_menu_icon {
+    background: url("../sprite_button.gif") no-repeat scroll 0 -560px transparent;
+    cursor: pointer;
+    display: none;
+    float: right;
+    height: 26px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 22px;
+}
+
+.main_tab_menu_icon:hover {
+    background-position: -30px -560px;
+}
+
+/* 联系人 */
+.main_tab_buddy {
+    background: url("../sprite_line.gif") repeat-x scroll 0 0 transparent;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 26px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 33%;
+}
+
+.main_tab_buddy_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -2px -460px transparent;
+    height: 26px;
+    margin: 0 auto;
+    width: 61px;
+}
+
+.main_tab_current .main_tab_buddy_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -2px -491px transparent;
+}
+
+/* 群 */
+.main_tab_group {
+    background: url("../sprite_line.gif") repeat-x scroll 0 0 transparent;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 26px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 33%;
+}
+
+.main_tab_group_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -72px -460px transparent;
+    height: 26px;
+    margin: 0 auto;
+    width: 61px;
+}
+
+.main_tab_current .main_tab_group_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -72px -491px transparent;
+}
+
+/* 最近联系人 */
+.main_tab_recent {
+    background: url("../sprite_line.gif") repeat-x scroll 0 0 transparent;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 26px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 34%;
+}
+
+.main_tab_recent_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -129px -460px transparent;
+    height: 26px;
+    margin: 0 auto;
+    width: 57px;
+}
+
+.main_tab_current .main_tab_recent_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -129px -491px transparent;
+}

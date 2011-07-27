@@ -1,0 +1,193 @@
+@charset "utf-8";
+
+/* 整体窗口 */
+.im_window {
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    display: block;
+    visibility: visible;
+    z-index: 22;
+}
+
+/* 外边框 */
+.im_window_outer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding: 10px;
+    _height: 430px;  /* ie 6 */
+}
+
+/* 内边框 */
+.im_window_inner {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+/* 窗口边框 */
+.window_bg_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 0 none;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: -1;
+}
+
+.window_bg {
+    border: 0 none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+.window_center{
+    background: url("images/window.png") repeat scroll left top transparent;
+    height: 100%;
+    width: 100%;
+}
+
+.window_t {
+    background: url("images/x.png") repeat-x scroll 0 -80px transparent;
+    height: 10px;
+    left: 0;
+    overflow: hidden;
+    top: -10px;
+    width: 100%;
+    background-position: 0 -100px;
+}
+
+.window_rt {
+    background: url("images/action_buttons.png") no-repeat scroll -10px 0 transparent;
+    height: 10px;
+    overflow: hidden;
+    right: -10px;
+    top: -10px;
+    width: 10px;
+    background-position: -30px 0;
+}
+
+.window_r {
+    background: url("images/y.png") repeat-y scroll -10px 0 transparent;
+    height: 100%;
+    overflow: hidden;
+    right: -10px;
+    width: 10px;
+    background-position: -30px 0;
+}
+
+.window_rb {
+    background: url("images/action_buttons.png") no-repeat scroll -10px -10px transparent;
+    bottom: -10px;
+    height: 10px;
+    overflow: hidden;
+    right: -10px;
+    width: 10px;
+    background-position: -30px -10px;
+}
+
+.window_b {
+    background: url("images/x.png") repeat-x scroll 0 -90px transparent;
+    bottom: -10px;
+    height: 10px;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+    background-position: 0 -110px;
+}
+
+.window_lb {
+    background: url("images/action_buttons.png") no-repeat scroll 0 -10px transparent;
+    bottom: -10px;
+    height: 10px;
+    left: -10px;
+    overflow: hidden;
+    width: 10px;
+    background-position: -20px -10px;
+}
+
+.window_l {
+    background: url("images/y.png") repeat-y scroll 0 0 transparent;
+    height: 100%;
+    left: -10px;
+    overflow: hidden;
+    width: 10px;
+    background-position: -20px 0;
+}
+
+.window_lt {
+    background: url("images/action_buttons.png") no-repeat scroll 0 0 transparent;
+    height: 10px;
+    left: -10px;
+    overflow: hidden;
+    top: -10px;
+    width: 10px;
+    background-position: -20px 0;
+}
+
+/* 窗口边框 结束 */
+
+/* 改变大小 加隐藏的div */
+.window_resize_t {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: n-resize; z-index: 1; left: 0; top: -5px;
+    width: 100%; height: 5px; display: block;
+}
+
+.window_resize_rt {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: ne-resize; z-index: 2; right: -5px; top: -5px;
+    width: 5px; height: 5px; display: block;
+}
+
+.window_resize_r {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: e-resize; z-index: 1; right: -5px; top: 0;
+    width: 5px; height: 100%; display: block;
+}
+
+.window_resize_rb {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: se-resize; z-index: 2; right: -5px; bottom: -5px;
+    width: 5px; height: 5px; display: block;
+}
+
+.window_resize_b {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: s-resize; z-index: 1; left: 0; bottom: -5px;
+    width: 100%; height: 5px; display: block;
+}
+
+.window_resize_lb {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: sw-resize; z-index: 2; left: -5px; bottom: -5px;
+    width: 5px; height: 5px; display: block;
+}
+
+.window_resize_l {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: w-resize; z-index: 1; left: -5px; top: 0;
+    width: 5px; height: 100%; display: block;
+}
+
+.window_resize_lt {
+    position: absolute; overflow: hidden;
+    background: url(../transparent.gif) repeat scroll 0 0 transparent;
+    cursor: nw-resize; z-index: 2; left: -5px; top: -5px;
+    width: 5px; height: 5px; display: block;
+}

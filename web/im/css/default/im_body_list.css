@@ -1,0 +1,184 @@
+@charset "utf-8";
+/**
+ *  联系人 人员列表
+ */
+
+/* tab栏容器 */
+.main_tab_container {
+    float: left;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.main_tab_buddy_panel, .main_tab_group_panel, .main_tab_recent_panel {
+    display: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+}
+
+/* 联系人列表 */
+.buddy_list {
+    bottom: 30px;
+    display: block;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    top: 0;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+/** 以下是动态生成的内容中用到的样式 **/
+
+/* 列表收缩/展开时 */
+.buddy_list_collapsed, .buddy_list_expanded  {
+    border: 0 none;
+    color: #000000;
+    cursor: pointer;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+.buddy_list_head_icon {
+    float: left;
+    height: 16px;
+    margin: 7px 0;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 18px;
+}
+
+/*  列表收缩时 箭头 */
+.buddy_list_collapsed .buddy_list_head_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -48px -16px transparent;
+}
+
+/*  列表展开时 箭头 */
+.buddy_list_expanded .buddy_list_head_icon {
+    background: url("../sprite_button.gif") no-repeat scroll -31px -16px transparent;
+}
+
+.buddy_list_head_container {
+    display: block;
+    overflow: hidden;
+    padding-left: 2px;
+}
+
+.buddy_list_name {
+    float: left;
+    width: auto;
+    font-size: 15px;
+}
+
+/* 列表主体 */
+.buddy_list_body {
+    height: 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.buddy_list_body_indent {
+    padding-left: 20px;
+}
+
+.buddy_callme, .buddy_online, .buddy_away,
+.buddy_busy, .buddy_silent, .buddy_hidden, .buddy_offline {
+    display: block;
+}
+
+/* 离线图标半透明 */
+.buddy_offline .buddy_user_avatar {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+/* 每个人的信息框架 */
+.buddy_user_container {
+    background: none repeat scroll 0 0 transparent;
+    color: #000000;
+    cursor: pointer;
+    display: block;
+    height: 42px;
+    overflow: hidden;
+    padding: 4px 0 4px 8px;
+    text-decoration: none;
+}
+
+.buddy_user_avatar_container {
+    float: left;
+    height: 42px;
+    overflow: hidden;
+    width: 42px;
+}
+
+img.buddy_user_avatar {
+    background: none repeat scroll 0 0 white;
+    border: 0 solid #e1e1e1;
+    display: block;
+    float: left;
+    height: 40px;
+    overflow: hidden;
+    padding: 1px;
+    position: static;
+    width: 40px;
+}
+
+/* user状态 */
+.buddy_user_state {
+    display: inline;
+    float: left;
+    height: 10px;
+    margin: 11px 0 0 -11px;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 10px;
+}
+
+.buddy_user_state_away {
+    background: url("../sprite_button.gif") no-repeat scroll -18px 0 yellow;
+    margin: 28px 0 0 -12px;
+}
+
+.buddy_user_state_busy {
+    background: url("../sprite_button.gif") no-repeat scroll -36px 0 yellow;
+    margin: 28px 0 0 -12px;
+}
+
+.buddy_user_state_silent {
+    background: url("../sprite_button.gif") no-repeat scroll -108px 0 yellow;
+    margin: 28px 0 0 -12px;
+}
+
+/* user的信息 */
+.buddy_user_info_container {
+    margin-right: 10px;
+    overflow: hidden;
+}
+
+.buddy_user_info_name {
+    height: 16px;
+    line-height: 16px;
+    margin: 0 0 0 5px;
+    overflow: hidden;
+    padding: 2px 0;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.buddy_user_info_sign {
+    height: 16px;
+    line-height: 16px;
+    margin: 0 0 0 5px;
+    overflow: hidden;
+    padding: 2px 0;
+    text-decoration: none;
+    color: #808080;
+    display: block;
+    font-size: 12px;
+}

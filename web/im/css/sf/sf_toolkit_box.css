@@ -1,0 +1,40 @@
+div.tbox {
+    position: absolute;
+    display: none;
+    padding: 14px 10px;
+    z-index: 2900;
+}
+
+div.tinner {
+    padding: 15px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #fff url(images/box/preload.gif) no-repeat 50% 50%;
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+div.tmask {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    z-index: 2800;
+}
+
+div.tclose {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: url(images/box/close.png) no-repeat;
+}
+
+div.tclose:hover {
+    background-position: 0 -30px;
+}

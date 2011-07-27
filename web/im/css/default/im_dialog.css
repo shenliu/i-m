@@ -1,0 +1,192 @@
+@charset "utf-8";
+
+/* 对话框 悬浮框 */
+.im_dialog {
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 5px 2px 6px #999;
+    -moz-box-shadow: 5px 2px 6px #999;
+
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    border: 0 none;
+    z-index: 2000;
+    overflow: visible;
+    height: auto;
+}
+
+.im_dialog_outer {
+    background: none repeat scroll 0 0 transparent;
+    height: 100%;
+    padding: 5px 5px 5px 5px;
+    position: relative;
+}
+
+.im_dialog_inner {
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.im_dialog_content {
+    background-color: #ffffff;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.im_close {
+    position: absolute;
+    top: -13px;
+    right: -15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: url(../close.png) no-repeat;
+}
+
+.im_close:hover {
+    background-position: 0 -30px;
+}
+
+.panel_1_container {
+    border: 0 none;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.panel_1 {
+    border: 0 none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    height: 100%;
+    overflow: visible;
+}
+
+.panel_1_center {
+    background: url("images/panel_1_c.png") repeat scroll left top transparent;
+    height: 100%;
+    width: 100%;
+}
+
+.panel_1_t {
+    background: url("images/x.png") repeat-x scroll 0 -125px transparent;
+    height: 5px;
+    left: 0;
+    overflow: hidden;
+    top: -5px;
+    width: 100%;
+}
+
+.panel_1_rt {
+    background: url("images/action_buttons.png") no-repeat scroll -50px -5px transparent;
+    height: 5px;
+    overflow: hidden;
+    right: -5px;
+    top: -5px;
+    width: 5px;
+}
+
+.panel_1_r {
+    background: url("images/y.png") repeat-y scroll -50px 0 transparent;
+    height: 100%;
+    overflow: hidden;
+    right: -5px;
+    width: 5px;
+}
+
+.panel_1_rb {
+    background: url("images/action_buttons.png") no-repeat scroll -50px -10px transparent;
+    bottom: -5px;
+    height: 5px;
+    overflow: hidden;
+    right: -5px;
+    width: 5px;
+}
+
+.panel_1_b {
+    background: url("images/x.png") repeat-x scroll 0 -130px transparent;
+    bottom: -5px;
+    height: 5px;
+    left: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.panel_1_lb {
+    background: url("images/action_buttons.png") no-repeat scroll -45px -10px transparent;
+    bottom: -5px;
+    height: 5px;
+    left: -5px;
+    overflow: hidden;
+    width: 5px;
+}
+
+.panel_1_l {
+    background: url("images/y.png") repeat-y scroll -45px 0 transparent;
+    height: 100%;
+    left: -5px;
+    overflow: hidden;
+    width: 5px;
+}
+
+.panel_1_lt {
+    background: url("images/action_buttons.png") no-repeat scroll -45px -5px transparent;
+    height: 5px;
+    left: -5px;
+    overflow: hidden;
+    top: -5px;
+    width: 5px;
+}
+
+/********************************************/
+
+/* 创建 确认 对话框 */
+.im_confirm_icon {
+    background: url("../../images/warning.png") no-repeat 100px center;
+    height: 64px;
+    line-height: 64px;
+    width: 100%;
+    text-indent: 3em;
+    font: normal normal bold 20px/64px \5FAE\8F6F\96C5\9ED1, \4EFF\5B8B;
+    letter-spacing: 5px;
+    margin-top: 10px;
+}
+
+.im_confirm {
+    background: none repeat scroll 0 0 #ffffff;
+    text-align: left;
+    margin: 5px;
+}
+
+.im_confirm_line {
+    display: block;
+    margin: 15px auto;
+    text-align: center;
+}
+
+.im_confirm label {
+    display: inline-block;
+}
+
+.im_confirm_ok, .im_confirm_cancel {
+    border: 1px solid #c4c4c4;
+    color: #666666;
+}
+
+.im_confirm_cancel {
+
+}

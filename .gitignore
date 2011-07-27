@@ -1,0 +1,8 @@
+.idea/
+out/
+im.iml
+src/com/dfjq/pojo/im/minaServer.xml
+web/WEB-INF/applicationContext.xml
+web/WEB-INF/classes/
+web/im/script/im_constant_url.js
+

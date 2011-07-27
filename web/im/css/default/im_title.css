@@ -1,0 +1,145 @@
+@charset "utf-8";
+
+/* 内容 */
+.im_window_content {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* 内容标题栏 */
+.im_window_content_titleBar {
+    cursor: default;
+    height: 28px;
+    overflow: hidden;
+}
+
+/* 内容标题栏 按钮栏 */
+.im_window_content_titleBar_buttonBar {
+
+}
+
+.ui_button {
+    background: url("../all.png") no-repeat scroll 0 -220px transparent;
+    color: #333333;
+    cursor: pointer;
+    float: right;
+    height: 23px;
+    line-height: 23px;
+    margin-left: 10px;
+    text-align: center;
+    width: 66px;
+}
+
+a.window_action_button {
+    background: url("images/action_buttons.png") no-repeat scroll -122px -22px transparent;
+    height: 19px;
+    width: 21px;
+}
+
+/* 关闭 */
+a.window_close {
+    cursor: pointer;
+    display: block;
+    float: right;
+    height: 22px;
+    _height: 20px;
+    margin-left: 4px;
+    width: 22px;
+    background-position: -123px -24px;
+}
+
+a.window_close:hover {
+    background-position: -123px -53px;
+}
+
+/* 最小化 */
+a.window_min {
+    cursor: pointer;
+    display: block;
+    float: right;
+    height: 22px;
+    _height: 20px;
+    margin-left: 4px;
+    width: 22px;
+    background-position: -63px -24px;
+}
+
+a.window_min:hover {
+    background-position: -63px -53px;
+}
+
+/* 最大化 */
+a.window_max {
+    cursor: pointer;
+    display: none;
+    float: right;
+    height: 22px;
+    _height: 20px;
+    margin-left: 4px;
+    width: 22px;
+    background-position: -94px -24px;
+}
+
+a.window_max:hover {
+    background-position: -94px -53px;
+}
+
+/* 还原 */
+a.window_restore {
+    cursor: pointer;
+    display: none;
+    float: right;
+    height: 22px;
+    _height: 20px;
+    margin-left: 4px;
+    width: 22px;
+    background-position: -183px -24px;
+}
+
+a.window_restore:hover {
+    background-position: -183px -53px;
+}
+
+/* 全屏 */
+a.window_fullscreen {
+    cursor: pointer;
+    display: none;
+    height: 22px;
+    _height: 20px;
+    margin-left: 4px;
+    width: 22px;
+    background-position: -34px -24px;
+}
+
+a.window_fullscreen:hover {
+    background-position: -34px -53px;
+}
+
+/* 退出全屏 */
+a.window_restore_full {
+    cursor: pointer;
+    display: none;
+    float: right;
+    height: 16px;
+    margin-left: 4px;
+    width: 16px;
+}
+
+a.window_restore_full:hover {
+    background-position: -152px -53px;
+}
+
+/***** 以下可能在多处重用 *****/
+
+/* 内容标题栏标题内容 */
+.window_title {
+    line-height: 20px;
+    height: 25px;
+    overflow: hidden;
+}
+
+.titleText {
+    color: #666666;
+    font-weight: bold;
+}

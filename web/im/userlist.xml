@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userlist>
+    <district name="集团" id="1">
+        <department name="集团领导" pid="1" id="1_1" count="2" total="2">
+            <user pid="1_1" uid="1" status="1">
+                <name>张三疯</name>
+                <gender>1</gender>
+                <sign>天下No.one</sign>
+                <picture></picture>
+                <telephone>123456789</telephone>
+                <mobile>98765543</mobile>
+                <dept>集团</dept>
+                <duty>总裁</duty>
+            </user>
+            <user pid="1_1" uid="2" status="2">
+                <name>李四</name>
+                <gender>2</gender>
+                <sign>天下NO. 2</sign>
+                <picture></picture>
+                <telephone>325435</telephone>
+                <mobile>67567</mobile>
+                <dept>集团</dept>
+                <duty>副总裁</duty>
+            </user>
+        </department>
+        <department name="幼教管理" pid="1" id="1_2" count="2" total="2">
+            <user pid="1_1" uid="2" status="2">
+                <name>李四</name>
+                <gender>2</gender>
+                <sign>天下NO. 2</sign>
+                <picture></picture>
+                <telephone>325435</telephone>
+                <mobile>67567</mobile>
+                <dept>集团</dept>
+                <duty>副总裁</duty>
+            </user>
+            <group name="华北华南区" pid="1_2" id="1_2_1">
+                <user pid="1_2_1" uid="3" status="3">
+                    <name>王五</name>
+                    <gender>1</gender>
+                    <sign>地下NO. 1</sign>
+                    <picture></picture>
+                    <telephone>1555</telephone>
+                    <mobile>5555555</mobile>
+                    <dept>幼教管理</dept>
+                    <duty>经理</duty>
+                </user>
+            </group>
+            <group name="华东区" pid="1_2" id="1_2_2">
+                <user pid="1_2_2" uid="4" status="4">
+                    <name>赵六儿</name>
+                    <gender>2</gender>
+                    <sign>地下NO. 2</sign>
+                    <picture></picture>
+                    <telephone>666-66666</telephone>
+                    <mobile>6666666</mobile>
+                    <dept>幼教管理</dept>
+                    <duty>副经理</duty>
+                </user>
+            </group>
+        </department>
+    </district>
+
+    <district name="北京" id="2">
+        <department name="校长" pid="2" id="2_1" count="1" total="1">
+            <user pid="2_1" uid="5" status="0">
+                <name>马七</name>
+                <gender>1</gender>
+                <sign>人间NO. 1</sign>
+                <picture></picture>
+                <telephone>77777</telephone>
+                <mobile>777-7777</mobile>
+                <dept>校长</dept>
+                <duty>校长</duty>
+            </user>
+        </department>
+        <department name="财务" pid="2" id="2_2" count="0" total="1">
+            <user pid="2_2" uid="6" status="-1">
+                <name>猴八</name>
+                <gender>2</gender>
+                <sign>财神爷</sign>
+                <picture></picture>
+                <telephone>8888888</telephone>
+                <mobile>888-88888</mobile>
+                <dept></dept>
+                <duty>出纳</duty>
+            </user>
+        </department>
+    </district>
+
+    <district name="上海" id="3">
+        <department name="园长" pid="3" id="3_1" count="1" total="1">
+            <user pid="3_1" uid="7" status="1">
+                <name>牛九</name>
+                <gender>1</gender>
+                <sign>上海滩老大</sign>
+                <picture></picture>
+                <telephone>999-999999</telephone>
+                <mobile>999999999</mobile>
+                <dept>园长</dept>
+                <duty>园长</duty>
+            </user>
+        </department>
+    </district>
+</userlist>
