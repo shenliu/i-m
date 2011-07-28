@@ -93,7 +93,7 @@ function im_genGroupChatWindow(container) {
         web.event.addEvent(chat_body_control_panel_sendmsg_button, 'click', function() {
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
-            if (val.stripTags().replace(/&nbsp;/g, '') == "") {  // 空信息
+            if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
                 var tip = web.className('chat_body_emptystring_tip', win)[0];
                 web.show(tip);
                 delay(function() {
@@ -120,6 +120,7 @@ function im_genGroupChatWindow(container) {
 
                 var message = command + IM_CONSTANT.hyphen + from + to + msg + style;
                 //console.log(message);
+                //alert(message);
 
                 // 清空打字区
                 var editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];

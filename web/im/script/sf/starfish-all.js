@@ -270,11 +270,15 @@ starfish.client = function() {
  * @param {Object}   	bind	在函数中this指向的对象(可选)
  */
 Array.prototype.forEach = function(func, bind) {
-	for (var i = 0, l = this.length; i < l; i++) {
-		if (i in this) {
-			func.call(bind, this[i], i, this);
-		}
-	}
+    if (!Array.prototype.forEach) {
+        for (var i = 0, l = this.length; i < l; i++) {
+            if (i in this) {
+                func.call(bind, this[i], i, this);
+            }
+        }
+    } else {
+        Array.forEach(func, bind);
+    }
 };
 
 /**

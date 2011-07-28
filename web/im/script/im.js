@@ -185,6 +185,9 @@ starfish.web.event.addEvent(window, 'load', function(){
 
     // user style 等
     im_getCookie('userStyle');
+
+    // 表情初始化
+    im_face();
 });
 
 /**

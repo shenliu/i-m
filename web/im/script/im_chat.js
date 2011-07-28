@@ -202,7 +202,7 @@ function im_genChatWindow(container) {
         web.event.addEvent(chat_body_control_panel_sendmsg_button, 'click', function() {
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
-            if (val.stripTags().replace(/&nbsp;/g, '') == "") {  // 空信息
+            if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
                 var tip = web.className('chat_body_emptystring_tip', win)[0];
                 web.show(tip);
                 delay(function() {
@@ -600,4 +600,35 @@ function im_addEventWindow(win, o) {
         return false;
     });
 
+    // 显示 表情列表
+    var facePanel = web.className('im_facePanel')[0];
+    var chat_body_toolbar_face_button = web.className('chat_body_toolbar_face_button', win)[0];
+    web.event.addEvent(chat_body_toolbar_face_button, 'click', function(e) {
+        var left = web.window.mouseX(e);
+        var top = web.window.mouseY(e);
+        var width = web.window.fullWidth(facePanel);
+        var height = web.window.fullHeight(facePanel);
+        web.css(facePanel, 'left', (left - width / 2) + 'px');
+        web.css(facePanel, 'top', (top - height - web.window.getElementY(e)) + 'px');
+        // !!! 记录这个列表是哪个窗口调用的 所有窗口共享同一个facePanel !!!
+        facePanel.setAttribute('caller', win.id);
+        web.show(facePanel);
+    });
+
+    // 解决ie下 回车 添加<p>的讨厌问题~~ 恨死ie!!!
+    if (starfish.client.browser.ie) {
+        var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+        web.event.addEvent(chat_body_inputbox_rich_editor_div, 'keypress', function(e) {
+            if (e.keyCode == 13) {  // 替换 回车
+                var sel = this.document.selection;
+                if (sel != null) {
+                    var rng = sel.createRange();
+                    if (rng != null) {
+                        rng.pasteHTML("<br /><!-- -->"); // 这儿还必须添加一个标签!! 晕~~~
+                    }
+                }
+                return false;
+            }
+        });
+    }
 }

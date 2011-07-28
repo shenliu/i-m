@@ -325,3 +325,112 @@ function im_getCookie(key) {
         }
     }
 }
+
+/**
+ * 初始化 表情列表
+ */
+function im_face() {
+    var web = starfish.web;
+    var facePanel = web.dom.elem('div');
+    facePanel.className = 'im_facePanel';
+    web.dom.insert(document.body, facePanel);
+
+    // 记录每一个目录中有多少张图片 (笨点~~ >_<)
+    var nums = [33, 20, 33, 34, 21, 37, 26];
+
+    // 记录每一个目录下图片的尺寸 假设宽高相等
+    var sizes = [50, 90, 80, 95, 120, 90, 90];
+
+    // tab
+    var tabarea = web.dom.elem('div');
+    tabarea.className = 'im_facePanel_tab_area';
+
+    // 循环排列图片
+    for (var i = 0; i < nums.length; i++) {
+        (function() {
+            var default_div = web.dom.elem('div');
+            default_div.className = 'im_default_facePanel';
+            var ul = web.dom.elem('ul');
+
+            var sub = i + 1;
+            var path = 'images/face/' + sub + '/';
+            for (var j = 1; j <= nums[i]; j++) {
+                (function() {
+                    var li = web.dom.elem('li');
+                    web.css(li, 'width', (sizes[i] + 2) + 'px');
+                    web.css(li, 'height', (sizes[i] + 2) + 'px');
+                    var mark = sub + '_' + (j < 10 ? '0' + j : j); // 每个图片的标记
+                    li.setAttribute('mark', mark);
+
+                    var img = web.dom.elem('img');
+                    img.src = path + mark + '.gif';
+                    web.css(img, 'width', (sizes[i]) + 'px');
+                    web.css(img, 'height', (sizes[i]) + 'px');
+                    web.dom.insert(li, img);
+                    web.dom.insert(ul, li);
+                    web.dom.insert(default_div, ul);
+
+                    // 鼠标over时
+                    web.event.addEvent(li, 'mouseover', function(e) {
+                        web.addClass(li, 'borderfocus');
+                    });
+
+                    // 鼠标out时
+                    web.event.addEvent(li, 'mouseout', function(e) {
+                        web.removeClass(li, 'borderfocus');
+                    });
+
+                    // 点击 选定图片 单击事件
+                    web.event.addEvent(li, 'click', function(e) {
+                        var win_id = facePanel.getAttribute('caller'); // 得到调用的窗口
+                        var win = $(win_id);
+                        if (win) {
+                            var editor = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+                            var pic = web.dom.elem('img');
+                            pic.src = img.src;
+                            pic.setAttribute('mark', mark);
+                            pic.className = "system";  // 在 im_chat.css 中定义
+                            web.dom.insert(editor, pic);
+                        }
+                        web.hide(facePanel); // 隐藏face panel
+                    });
+                })();
+            }
+            web.dom.insert(facePanel, default_div);
+
+            // tab下的标签
+            var a = web.dom.elem('a');
+            a.href = "#";
+            web.dom.addText('第' + (i + 1) + '组', a);
+
+            // 为tab切换div 添加单击事件
+            web.event.addEvent(a, 'click', function() {
+                var divs = web.className('im_default_facePanel', facePanel);
+                for (var ii = 0, jj = divs.length; ii < jj; ii++) {
+                    web.hide(divs[ii]); // 先全部隐藏
+                }
+                web.show(default_div); // 再显示点击的
+
+                var _a = web.className('current', tabarea)[0];
+                if (_a) { // 把原有<a class='current'>的元素移除current class
+                    web.removeClass(_a, 'current');
+                }
+                web.addClass(this, 'current');
+                this.blur(); // 失去焦点 有虚框~~
+            });
+            web.dom.insert(tabarea, a);
+        })();
+    }
+    web.dom.insert(facePanel, tabarea);
+
+    // 初始时 触发'第一组'
+    var as = $$(tabarea, 'a');
+    if (as[0].click) {
+        as[0].click();
+    } else {  // chrome
+        var evt = document.createEvent("MouseEvents");
+        evt.initEvent("click", true, true);
+        as[0].dispatchEvent(evt);
+    }
+
+}

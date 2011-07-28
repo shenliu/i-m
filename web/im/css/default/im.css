@@ -6,6 +6,7 @@
 @import "im_body_list.css";
 @import "im_chat.css";
 @import "im_group.css";
+@import "im_dialog.css";
 
 body {
     font-family: \5FAE\8F6F\96C5\9ED1, \4EFF\5B8B; /* 微软雅黑,仿宋 */
@@ -44,10 +45,12 @@ body {
     filter: alpha(opacity=95);
 }
 
+/* 默认背景 */
 .backgroundColor {
     background-color: #cce2ef;
 }
 
+/* 默认border */
 .borderfocus {
     border: 1px solid #555577;
     box-shadow: 0 0 8px #999999;
