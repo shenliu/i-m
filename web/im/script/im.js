@@ -57,8 +57,9 @@ starfish.web.event.addEvent(window, 'load', function(){
     html.push('<div class="my_toolbar"></div>');
     html.push('<div class="my_mainPanel">');
     html.push('  <div class="main_searchBar">');
-    html.push('    <input id="main_searchBar" class="main_search_input" type="text" title="搜索好友..." value="搜索好友..." name="" />');
-    html.push('    <div id="main_searchButton" class="main_search_bt" title="搜索...">搜索按钮</div>');
+    html.push('    <label class="main_search_label">查找成员...</label>');
+    html.push('    <input class="main_search_input" type="text" title="查找成员..." value="" />');
+    html.push('    <div class="main_search_bt" title="查找...">查找按钮</div>');
     html.push('  </div>');
     html.push('  <ul class="main_tab">');
     html.push('    <li class="main_tab_buddy" title="联系人">');
@@ -170,6 +171,9 @@ starfish.web.event.addEvent(window, 'load', function(){
         evt.initEvent("click", true, true);
         lis[0].dispatchEvent(evt);
     }
+
+    // 查找框 初始化
+    im_search_init();
 
     // 构建 联系人 列表  在im_userlist.js中
     im_userlist();

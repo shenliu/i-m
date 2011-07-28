@@ -171,13 +171,43 @@
     overflow: hidden;
 }
 
+div.hover-wrap {
+    position: relative;
+    display: inline;
+}
+
+label.main_search_label {
+    color: #cccccc;
+    left: 5px;
+    position: absolute;
+    display: block;
+    float: left;
+    font-size: 1em;
+    height: 20px;
+    line-height: 20px;
+    _margin-top: 3px;
+    letter-spacing: 1px;
+}
+
 input.main_search_input {
     border: 0 solid #cccccc;
     color: #999999;
-    font-size: 12px;
+    font-size: 13px;
     height: 16px;
     line-height: 16px;
     margin: 0;
+    overflow: hidden;
+    padding: 5px 5px;
+    width: 100%;
+}
+
+/* 搜索栏得到焦点时 */
+input.main_search_input_focus {
+    border: 0 solid #a2d0f1;
+    color: #333333;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
     overflow: hidden;
     padding: 5px 2px;
     width: 100%;
@@ -194,6 +224,10 @@ input.main_search_input {
     position: relative;
     text-indent: -999em;
     width: 16px;
+}
+
+.main_search_bt_hightlight {
+    background-position: -142px -82px;
 }
 
 /* 联系人 群 最近联系人 tab栏 */
