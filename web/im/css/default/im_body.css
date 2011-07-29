@@ -182,11 +182,12 @@ label.main_search_label {
     position: absolute;
     display: block;
     float: left;
-    font-size: 1em;
+    font-size: 12px;
     height: 20px;
     line-height: 20px;
-    _margin-top: 3px;
+    margin-top: 3px;
     letter-spacing: 1px;
+    cursor: text;
 }
 
 input.main_search_input {
@@ -228,6 +229,46 @@ input.main_search_input_focus {
 
 .main_search_bt_hightlight {
     background-position: -142px -82px;
+}
+
+/* 搜索结果栏 */
+.main_search_result {
+    background: none repeat scroll 0 0 white;
+    border-color: #cccccc #6a6a6a #666666 #cdcdcd;
+    border-style: solid;
+    border-width: 1px;
+    display: none;
+    height: auto;
+    left: 0px;
+    overflow: hidden;
+    position: absolute;
+    width: 90%;
+    top: 77px;
+    z-index: 2;
+}
+
+.main_search_result span {
+    color: #999999;
+    font-size: 13px;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.main_search_result ul {
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.main_search_result ul li {
+    height: 20px;
+    line-height: 20px;
+    padding: 2px 5px;
+    font-size: 13px;
+    cursor: pointer;
 }
 
 /* 联系人 群 最近联系人 tab栏 */

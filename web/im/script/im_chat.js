@@ -119,6 +119,12 @@ function im_message(data) {
  * @param uid
  */
 function im_showMessage(uid) {
+    if (uid === IM_CONSTANT.myself_id) { // 不是自己的id
+        return;
+    }
+    if ($('window_' + IM_CONSTANT.myself_id + "_" + uid)) {  // 窗口已经打开
+        return;
+    }
     var container = im_findByUid('buddy', uid);
     im_genChatWindow(container);
 }
@@ -135,8 +141,8 @@ function im_genChatWindow(container) {
         clazz: {
             width: '445px',
             height: '405px',
-            left: '387px',
-            top: '20px',
+            left: Number.random(30, 400) + 'px',
+            top: Number.random(20, 200) + 'px',
             'z-index': 25
         }
     });
@@ -154,6 +160,10 @@ function im_genChatWindow(container) {
     _addEvent(win, container);
 
     _showMessage(win, container);
+
+    // 默认 编辑框获得焦点
+    var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+    chat_body_inputbox_rich_editor_div.focus();
 
     ///////////////////////////////
 
@@ -199,7 +209,19 @@ function im_genChatWindow(container) {
     function _addEvent(win, o) {
         // 发送按钮 点击事件
         var chat_body_control_panel_sendmsg_button = web.className('chat_body_control_panel_sendmsg_button', win)[0];
-        web.event.addEvent(chat_body_control_panel_sendmsg_button, 'click', function() {
+        web.event.addEvent(chat_body_control_panel_sendmsg_button, 'click', function(e) {
+            _event(e);
+        });
+
+        // 按 ctrl+enter 键盘事件
+        var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+        web.event.addEvent(chat_body_inputbox_rich_editor_div, 'keydown', function(e) {
+            if (e.ctrlKey && e.keyCode == 13) {
+                _event(e);
+            }
+        });
+
+        function _event(e) {
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
             if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
@@ -233,7 +255,7 @@ function im_genChatWindow(container) {
 
                 // 此处 去调用 im_chat.js 中的 im_callback方法  ~~~~
             }
-        });
+        }
     }
 
     /**

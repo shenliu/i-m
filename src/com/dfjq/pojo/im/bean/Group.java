@@ -55,4 +55,5 @@ public class Group {
     public void setMember(String member) {
         this.member = member;
     }
+
 }

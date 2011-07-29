@@ -60,6 +60,7 @@ starfish.web.event.addEvent(window, 'load', function(){
     html.push('    <label class="main_search_label">查找成员...</label>');
     html.push('    <input class="main_search_input" type="text" title="查找成员..." value="" />');
     html.push('    <div class="main_search_bt" title="查找...">查找按钮</div>');
+    html.push('    <div class="main_search_result"></div>');
     html.push('  </div>');
     html.push('  <ul class="main_tab">');
     html.push('    <li class="main_tab_buddy" title="联系人">');
