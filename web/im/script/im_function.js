@@ -34,6 +34,24 @@ function im_findByUid(type, id) {
 }
 
 /**
+ * 根据uid找到所有的userlist中对应的div
+ * @param {String}  uid  用户id
+ * @return  {Array}  所有的div
+ */
+function im_allByUid(uid) {
+    var result = [];
+    var list = starfish.web.className('buddy_list')[0];
+    var containers = starfish.web.className("buddy_user_container", list, "div");
+    for (var ii = 0, jj = containers.length; ii < jj; ii++) {
+        var container = containers[ii];
+        if (container.getAttribute('uid') == uid) {
+            result.push(container);
+        }
+    }
+    return result;
+}
+
+/**
  * 生成 对话框 框架
  * @param  {Object}  options  选项
  *      options {
@@ -433,4 +451,135 @@ function im_face() {
         as[0].dispatchEvent(evt);
     }
 
+}
+
+/**
+ * 改变自己在线状态
+ */
+function im_state() {
+    var web = starfish.web;
+
+    var statePanel = web.dom.elem('div');
+    statePanel.className = 'statePanel';
+    var html = [];
+    html.push('<li state="online">');
+    html.push('    <div class="state_icon state_online"></div>');
+    html.push('    <div class="state_text">我在线上</div>');
+    html.push('</li>');
+    html.push('<li state="away">');
+    html.push('    <div class="state_icon state_away"></div>');
+    html.push('    <div class="state_text">离开</div>');
+    html.push('</li>');
+    html.push('<li state="busy">');
+    html.push('    <div class="state_icon state_busy"></div>');
+    html.push('    <div class="state_text">忙碌</div>');
+    html.push('</li>');
+    html.push('<li state="silent">');
+    html.push('    <div class="state_icon state_silent"></div>');
+    html.push('    <div class="state_text">请勿打扰</div>');
+    html.push('</li>');
+    html.push('<li state="hidden">');
+    html.push('    <div class="state_icon state_hidden"></div>');
+    html.push('    <div class="state_text">隐身</div>');
+    html.push('</li>');
+    html.push('<li state="offline">');
+    html.push('    <div class="state_icon state_offline"></div>');
+    html.push('    <div class="state_text">离线</div>');
+    html.push('</li>');
+    statePanel.innerHTML = html.join('');
+    web.dom.insert(document.body, statePanel);
+
+    // 显示 statePanel 点击事件
+    var my_panel_info_state = web.className('my_panel_info_state')[0];
+    var state_show = web.className('my_panel_info_state_show')[0];
+    web.event.addEvent(my_panel_info_state, 'click', function(e) {
+        var left = web.window.pageX(this);
+        var top = web.window.pageY(this) + web.window.fullHeight(this);
+        web.czz(statePanel, {
+            left: left + 'px',
+            top: top + 'px'
+        });
+        web.show(statePanel);
+    });
+
+    var lis = $$(statePanel, 'li');
+    for (var i = 0, j = lis.length; i < j; i++) {
+        (function() {
+            var li = lis[i];
+            // 鼠标 移动到li内 改变背景
+            web.event.addEvent(li, 'mouseover', function(e) {
+                web.addClass(li, 'backgroundColor');
+            });
+
+            // 鼠标 移出li
+            web.event.addEvent(li, 'mouseout', function(e) {
+                web.removeClass(li, 'backgroundColor');
+            });
+
+            // 点击li 事件
+            web.event.addEvent(li, 'click', function(e) {
+                var state = li.getAttribute('state');
+                state_show.className = "my_panel_info_state_show";
+                web.addClass(state_show, 'state_' + state);
+                web.hide(statePanel);
+
+                // 到每一个用户的客户端上 ~~~
+                var command = IM_CONSTANT.command.status.state;
+                // 形如: state#*#uid#*#state
+                var message = command + IM_CONSTANT.hyphen + IM_CONSTANT.myself_id + IM_CONSTANT.hyphen + state;
+                // 发出消息
+                IM_CONSTANT.socket.write(message);
+            });
+
+        })();
+    }
+}
+
+/**
+ * 改变别人的在线状态 后台回调方法
+ * @param data
+ */
+function im_chgState(data) {
+    //console.log(data);
+    var web = starfish.web;
+
+    var uid = data.split(IM_CONSTANT.hyphen)[0];
+    var state = data.split(IM_CONSTANT.hyphen)[1];
+    var containers = im_allByUid(uid);
+    for (var i = 0; i < containers.length; i++) {
+        var container = containers[i];
+        var buddy_user_state = web.className('buddy_user_state', container)[0];
+        buddy_user_state.className = 'buddy_user_state';
+        web.addClass(buddy_user_state, 'buddy_user_state_' + state);
+        // 改变保存在container上的status属性
+        container.setAttribute('status', IM_CONSTANT.user_status[state]);
+        // 改变title 显示
+        web.dom.parent(buddy_user_state).title = IM_CONSTANT.user_status_desc[state];
+
+        // 放到对应的div中
+        var parent1 = web.dom.parent(container);
+        var oldclass = parent1.className.split('_')[1]; // 原本处于的div的className
+        var parent2 = web.dom.parent(container, 2);
+        var div = web.className('buddy_' + state, parent2)[0];
+        container = web.dom.dispose(container);
+        web.dom.insert(div, container);
+
+        // 改变统计在线人数显示
+        parent2 = web.dom.prev(parent2);
+        var span = web.className('onlineNumber', parent2)[0];
+        if (span) {
+            var num = parseInt(span.innerHTML);
+            if ((oldclass != 'hidden' && oldclass != 'offline')  // 原来不是hidden/offline 现在是了
+                    && (state === 'hidden' || state === 'offline')) {
+                num -= 1;
+            } else if ((oldclass === 'hidden' || oldclass === 'offline')  // 原来是hidden/offline 现在不是了
+                    && (state != 'hidden' && state != 'offline')) {
+                num += 1;
+            }
+            span.innerHTML = num;
+        }
+
+        // 判断是否有对应的用户的窗口打开着
+        // 单聊窗口
+    }
 }

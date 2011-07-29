@@ -11,15 +11,17 @@ starfish.web.event.addEvent(window, 'load', function(){
         IM_CONSTANT.socket.connect(IM_CONSTANT.server_host, IM_CONSTANT.server_port);
     };
 
-    IM_CONSTANT.socket.onConnect = function(success, msg) {
-        if (success) {
-            IM_CONSTANT.socket.write("#*#USERID#*#:" + IM_CONSTANT.myself_id);
-        }
-    };
-
     IM_CONSTANT.socket.onData = im_callback;
 
     IM_CONSTANT.socket.setup('im_socket');
+
+    IM_CONSTANT.socket.onConnect = function(success, msg) {
+        if (success) {
+            IM_CONSTANT.socket.write("###USERID###:" + IM_CONSTANT.myself_id);
+            IM_CONSTANT.socket.write("state" + IM_CONSTANT.hyphen
+                    + IM_CONSTANT.myself_id + IM_CONSTANT.hyphen + "online");
+        }
+    };
 
     ////////////////////////////////////////////
 
@@ -94,7 +96,7 @@ starfish.web.event.addEvent(window, 'load', function(){
     html.push('        </div>');
     html.push('      </div>');
     html.push('    </div>');
-    html.push('    <div class="main_tab_recent_panel">333</div>');
+    html.push('    <div class="main_tab_recent_panel"></div>');
     html.push('  </div>');
     html.push('</div>');
     win_body.innerHTML = html.join('');
@@ -172,6 +174,9 @@ starfish.web.event.addEvent(window, 'load', function(){
         evt.initEvent("click", true, true);
         lis[0].dispatchEvent(evt);
     }
+
+    // 在线状态初始化
+    im_state();
 
     // 查找框 初始化
     im_search_init();

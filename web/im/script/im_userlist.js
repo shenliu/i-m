@@ -69,7 +69,8 @@ function im_userlist() {
                 }
 
                 var uid = child.getAttribute('uid');
-                var status = child.getAttribute('status');
+                //var status = child.getAttribute('status');
+                var status = -1;
                 // 注意: name gender转成字符串 其他为Node对象
                 var name = starfish.xml.getNode(child, 'name').firstChild.data;
                 var gender = starfish.xml.getNode(child, 'gender').firstChild.data;
@@ -120,9 +121,9 @@ function im_userlist() {
                 web.dom.addText(sign, buddy_user_info_sign);
 
                 // 状态样式
-                var statusClass = '';
+                //var statusClass = '';
 
-                switch (parseInt(child.getAttribute('status'))) {
+                switch (parseInt(status)) {
                     case IM_CONSTANT.user_status.online:
                         buddy_user_avatar_container.title = '在线';
                         buddy_user_info_name.title = name + " - 在线";
@@ -131,21 +132,21 @@ function im_userlist() {
                     case IM_CONSTANT.user_status.away:
                         buddy_user_avatar_container.title = '离开';
                         web.addClass(buddy_user_state, 'buddy_user_state_away');
-                        statusClass = 'buddy_user_state_away';
+                        //statusClass = 'buddy_user_state_away';
                         buddy_user_info_name.title = name + " - 离开";
                         web.dom.insert(buddy_away, buddy_user_container);
                         break;
                     case IM_CONSTANT.user_status.silent:
                         buddy_user_avatar_container.title = '请勿打扰';
                         web.addClass(buddy_user_state, 'buddy_user_state_silent');
-                        statusClass = 'buddy_user_state_silent';
+                        //statusClass = 'buddy_user_state_silent';
                         buddy_user_info_name.title = name + " - 请勿打扰";
                         web.dom.insert(buddy_silent, buddy_user_container);
                         break;
                     case IM_CONSTANT.user_status.busy:
                         buddy_user_avatar_container.title = '忙碌';
                         web.addClass(buddy_user_state, 'buddy_user_state_busy');
-                        statusClass = 'buddy_user_state_busy';
+                        //statusClass = 'buddy_user_state_busy';
                         buddy_user_info_name.title = name + " - 忙碌";
                         web.dom.insert(buddy_busy, buddy_user_container);
                         break;
@@ -171,7 +172,7 @@ function im_userlist() {
 
                 // 添加属性 在打开对话窗口时使用
                 buddy_user_container.setAttribute('uid', uid);
-                buddy_user_container.setAttribute('status', status);
+                //buddy_user_container.setAttribute('status', status);
                 buddy_user_container.setAttribute('username', name);
                 buddy_user_container.setAttribute('gender', gender);
                 buddy_user_container.setAttribute('sign', sign);
@@ -180,18 +181,18 @@ function im_userlist() {
                 buddy_user_container.setAttribute('mobile', mobile);
                 buddy_user_container.setAttribute('dept', dept);
                 buddy_user_container.setAttribute('duty', duty);
-                buddy_user_container.setAttribute('statusClass', statusClass);
+                //buddy_user_container.setAttribute('statusClass', statusClass);
 
                 // 双击事件 开始对话窗口
                 web.event.addEvent(buddy_user_container, 'dblclick', function() {
-                    var self = this;
-                    var uid = self.getAttribute('uid');
+                    var that = this;
+                    var uid = that.getAttribute('uid');
                     if (uid == IM_CONSTANT.myself_id) { // 是自己不显示窗口
                         return;
                     }
                     var win = $('window_' + IM_CONSTANT.myself_id + "_" + uid);
                     if (!win) {
-                        im_genChatWindow(self);
+                        im_genChatWindow(that);
                     }
                 });
 
@@ -229,9 +230,9 @@ function im_userlist() {
 
         web.dom.insert(buddy_list_head_container, buddy_list_name);
 
-        if (obj.getAttribute('count') != null && obj.getAttribute('total') != null) {
+        if (obj.getAttribute('total') != null) {
             var span = web.dom.elem('span');
-            web.dom.addText("[" + obj.getAttribute('count') + "/" + obj.getAttribute('total') + "]", span);
+            span.innerHTML = "[<span class='onlineNumber'>0</span>/" + obj.getAttribute('total') + "]";
             web.dom.insert(buddy_list_head_container, span);
         }
 

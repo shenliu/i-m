@@ -4,7 +4,7 @@ var IM_CONSTANT = {
     myself_id: null, // 记录自己的user id
     myself_name: '',
 
-    hyphen: "#*#", // 分隔符
+    hyphen: "###", // 分隔符
 
     xml_end_node: 'user', // xml中定义user的最终node name
 
@@ -12,6 +12,7 @@ var IM_CONSTANT = {
     height_min: 100, // im窗体最小高度
 
     user_status: {  // 用户状态
+        state:   'state',
         online:  1,  // 在线
         away:    2,  // 离开
         silent:  3,  // 请勿打扰
@@ -20,11 +21,21 @@ var IM_CONSTANT = {
         offline: -1  // 离线
     },
 
+    user_status_desc: {  // 用户状态说明
+        state:   'state',
+        online:  '我在线上',
+        away:    '离开',
+        silent:  '请勿打扰',
+        busy:    '忙碌',
+        hidden:  '不在线', // 这儿~~~
+        offline: '离线'
+    },
+
     show_offline_user: true, // 是否显示离线用户
 
     last_chatwindow: null, // 记录上一次的 chatwindow 对象 使其他chatwindow可以在最上层显示(z-index)
 
-    server_host: '192.168.0.164',
+    server_host: '',
     server_port: 2528,
 
     socket: null, // jsocket 实例对象

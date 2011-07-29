@@ -92,8 +92,8 @@
     display: block;
 }
 
-/* 离线图标半透明 */
-.buddy_offline .buddy_user_avatar {
+/* 隐身 离线图标半透明 */
+.buddy_hidden .buddy_user_avatar, .buddy_offline .buddy_user_avatar {
     opacity: 0.5;
     filter: alpha(opacity=50);
 }

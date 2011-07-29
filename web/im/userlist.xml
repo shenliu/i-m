@@ -34,7 +34,7 @@
                 <dept>集团</dept>
                 <duty>副总裁</duty>
             </user>
-            <group name="华北华南区" pid="1_2" id="1_2_1">
+            <group name="华北华南区" pid="1_2" id="1_2_1" count="0" total="1">
                 <user pid="1_2_1" uid="3" status="3">
                     <name>王五</name>
                     <gender>1</gender>
@@ -46,7 +46,7 @@
                     <duty>经理</duty>
                 </user>
             </group>
-            <group name="华东区" pid="1_2" id="1_2_2">
+            <group name="华东区" pid="1_2" id="1_2_2" count="0" total="1">
                 <user pid="1_2_2" uid="4" status="4">
                     <name>赵六儿</name>
                     <gender>2</gender>

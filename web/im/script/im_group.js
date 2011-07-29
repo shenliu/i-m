@@ -202,12 +202,12 @@ function im_displayGroup() {
 
                 // 双击 出现群聊窗口
                 web.event.addEvent(group, 'dblclick', function(e) {
-                    var self = this;
-                    var gid = self.getAttribute('gid');
+                    var that = this;
+                    var gid = that.getAttribute('gid');
                     // id: window_group_gid
                     var win = $('window_group_' + gid);
                     if (!win) {
-                        im_genGroupChatWindow(self);
+                        im_genGroupChatWindow(that);
                     }
                 });
 

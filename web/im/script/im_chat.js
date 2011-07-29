@@ -1,5 +1,5 @@
 function im_callback(data) {
-    //console.log("back -> " + data);
+    // console.log("back -> " + data);
     var offset = data.indexOf(IM_CONSTANT.hyphen);
     var command = data.substring(0, offset);
     var result = data.substring(offset + IM_CONSTANT.hyphen.length);
@@ -12,8 +12,10 @@ function im_callback(data) {
             break;
         case IM_CONSTANT.command.broadcast:
             break;
-        default:  // 改变状态
-            // todo
+        case IM_CONSTANT.command.status.state:
+            im_chgState(result);
+            break;
+        default:
             break;
     }
 }
@@ -137,7 +139,8 @@ function im_genChatWindow(container) {
     var web = starfish.web;
 
     var win = im_window({
-        id: 'window_' + IM_CONSTANT.myself_id + "_" + container.getAttribute('uid'), // window_自己id_对象id(或群id)
+        // window_自己id_对象id
+        id: 'window_' + IM_CONSTANT.myself_id + "_" + container.getAttribute('uid'),
         clazz: {
             width: '445px',
             height: '405px',
@@ -185,13 +188,14 @@ function im_genChatWindow(container) {
         var mobile = o.getAttribute('mobile');
         var dept = o.getAttribute('dept');
         var duty = o.getAttribute('duty');
-        var statusClass = o.getAttribute('statusClass');
+        //var statusClass = o.getAttribute('statusClass');
 
         var html = [];
         // chat window 标头
         html.push('<div class="chat_avatar_area">');
         html.push('  <img class="chat_avatar" src="' + picture + '" />');
-        html.push('  <div class="chat_user_state ' + statusClass + '"></div>');
+        //html.push('  <div class="chat_user_state ' + statusClass + '"></div>');
+        html.push('  <div class="chat_user_state"></div>');
         html.push('</div>');
         html.push('<div class="chat_userinfo_area">');
         html.push('  <a class="chat_username titleText" href="#" title="' + username + '">');

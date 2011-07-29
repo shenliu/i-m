@@ -25,7 +25,7 @@ public class ServerHandler extends IoHandlerAdapter {
      */
     private ConcurrentMap<String, Map<String, IoSession>> sessions = new ConcurrentHashMap<String, Map<String, IoSession>>();
 
-    private final String HYPHEN = "#\\*#";
+    private final String HYPHEN = "###";
 
     private static final Logger logger = LoggerFactory
             .getLogger(ServerHandler.class);
@@ -77,16 +77,27 @@ public class ServerHandler extends IoHandlerAdapter {
         }
 
         // 记录session.
-        if (msg.indexOf("#*#USERID#*#:") != -1) {
+        if (msg.indexOf("###USERID###:") != -1) {
             Map<String, IoSession> map = new HashMap<String, IoSession>();
-            int offset = msg.indexOf("#*#USERID#*#:") + "#*#USERID#*#:".length();
-            map.put(msg.substring(offset), session);
+            int offset = msg.indexOf("###USERID###:") + "###USERID###:".length();
+            String id = msg.substring(offset);
+            map.put(id, session);
             sessions.put(session.getRemoteAddress().toString(), map);
-            logger.info("userid added~~: " + msg.substring(offset));
+            //System.out.println("userid added~~: " + id);
             return;
         }
 
         String[] result = msg.split(HYPHEN, 2);
+        /**
+         * 消息:
+         *      msg     group      broadcast
+         * 状态:
+         *      state
+         * 请求:
+         *      req
+         * 执行:
+         *      exec
+         */
         String command = result[0];
 
         if ("msg".equals(command)) {
@@ -95,12 +106,31 @@ public class ServerHandler extends IoHandlerAdapter {
             msg(command, msg);
         } else if ("broadcast".equals(command)) {
             msg(command, msg);
-        } else { // 状态改变
-
+        } else if ("state".equals(command)) { // 状态改变
+            state(msg);
         }
 
     }
 
+    /**
+     * 改变 用户状态 通知每一个用户
+     * @param  msg  uid#*#state
+     */
+    private void state(String msg) {
+        for (Map.Entry<String, Map<String, IoSession>> outEntry : sessions.entrySet()) {
+            Map<String, IoSession> map = outEntry.getValue();
+            for (Map.Entry<String, IoSession> innerEntry : map.entrySet()) {
+                IoSession sess = innerEntry.getValue();
+                sess.write(msg);
+            }
+        }
+    }
+
+    /**
+     * 发送消息 给对话人
+     * @param command
+     * @param msg
+     */
     private void msg(String command, String msg) {
         //对客户端做出的响应
         String from = find("<from>", msg);

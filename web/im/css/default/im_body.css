@@ -102,6 +102,47 @@
     width: 7px;
 }
 
+/* 状态面板 */
+.statePanel {
+    background: none repeat scroll 0 0 white;
+    border-color: #cccccc #6a6a6a #666666 #cdcdcd;
+    border-style: solid;
+    border-width: 1px;
+    display: none;
+    height: 134px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 100px;
+    z-index: 40;
+}
+
+.statePanel li {
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 16px;
+    line-height: 16px;
+    margin: 0;
+    overflow: hidden;
+    padding: 3px 0;
+    width: 100px;
+}
+
+.statePanel li div.state_icon {
+    float: left;
+    height: 16px;
+    margin: 0 0 0 5px;
+    overflow: hidden;
+    width: 12px;
+}
+
+.statePanel li div.state_text {
+    margin: 0 0 0 22px;
+    font-size: 13px;
+}
+
 /* 我的信息 别名 */
 .my_panel_info_nickname {
     color: #030303;
