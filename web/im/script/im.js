@@ -5,15 +5,13 @@ starfish.web.event.addEvent(window, 'load', function(){
     IM_CONSTANT.myself_id = location.search.getParamter('userid'); // 这里 '本人' 的Id暂为传进来的参数 todo
 
     // jSocket
-    IM_CONSTANT.socket = new jSocket();
+    IM_CONSTANT.socket = new JSocket(null, null, null, null);
 
     IM_CONSTANT.socket.onReady = function() {
         IM_CONSTANT.socket.connect(IM_CONSTANT.server_host, IM_CONSTANT.server_port);
     };
 
     IM_CONSTANT.socket.onData = im_callback;
-
-    IM_CONSTANT.socket.setup('im_socket');
 
     IM_CONSTANT.socket.onConnect = function(success, msg) {
         if (success) {
@@ -22,6 +20,8 @@ starfish.web.event.addEvent(window, 'load', function(){
                     + IM_CONSTANT.myself_id + IM_CONSTANT.hyphen + "online");
         }
     };
+
+    IM_CONSTANT.socket.setup('im_socket');
 
     ////////////////////////////////////////////
 

@@ -45,6 +45,18 @@ body {
     filter: alpha(opacity=95);
 }
 
+#hasMessage a, #hasWaining a {
+    color: #fff;
+}
+
+#hasMessage a:hover, #hasWaining a:hover {
+    border-bottom: 1px solid #fff;
+}
+
+#hasMessage span {
+    display: block;
+}
+
 /* 默认背景 */
 .backgroundColor {
     background-color: #cce2ef;

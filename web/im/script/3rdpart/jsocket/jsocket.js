@@ -5,14 +5,14 @@
  * @param {function} onData Socket received data from the remote host
  * @param {function} onClose Remote host disconnects the connection
  */
-function jSocket(onReady, onConnect, onData, onClose) {
+function JSocket(onReady, onConnect, onData, onClose) {
     this.onReady = onReady;
     this.onConnect = onConnect;
     this.onData = onData;
     this.onClose = onClose;
 
-    this.id = "jSocket_" + (++jSocket.last_id);
-    jSocket.sockets[this.id] = this;
+    this.id = "jSocket_" + (++JSocket.last_id);
+    JSocket.sockets[this.id] = this;
 
     // Connection state
     this.connected = false;
@@ -22,42 +22,42 @@ function jSocket(onReady, onConnect, onData, onClose) {
  * String defining the default swf file
  * @var String
  */
-jSocket.swf = "script/3rdpart/jsocket/jsocket.swf";
+JSocket.swf = "script/3rdpart/jsocket/jsocket.swf";
 
 /**
  * Object used as array with named keys to
  * keep references to the instantiated sockets
  * @var Object
  */
-jSocket.sockets = {};
+JSocket.sockets = {};
 
 /**
  * Id used to generate a unique id for the embedded swf
  * @var int
  */
-jSocket.last_id = 0;
+JSocket.last_id = 0;
 
 /**
  * A nonexisting public flash object variable
  * This variable is used for testing access to the object.
  * @var String
  */
-jSocket.variableTest = 'xt';
+JSocket.variableTest = 'xt';
 
 /**
  * Find the SWF in the DOM and return it
  * @return DOMNode
  */
-jSocket.prototype.findSwf = function() {
+JSocket.prototype.findSwf = function() {
     return document.getElementById(this.target);
-}
+};
 
 /**
  * Insert the SWF into the DOM
- * @param String {target} The id of the DOMnode that will get replaced by the SWF
- * @param String {swflocation} The filepath to the SWF
+ * @param {String} target The id of the DOMnode that will get replaced by the SWF
+ * @param {String} swflocation The filepath to the SWF
  */
-jSocket.prototype.setup = function(target, swflocation) {
+JSocket.prototype.setup = function(target, swflocation) {
     if (typeof(swfobject) == 'undefined')
         throw 'SWFObject not found! Please download from http://code.google.com/p/swfobject/';
     if (typeof(this.target) != 'undefined')
@@ -66,92 +66,91 @@ jSocket.prototype.setup = function(target, swflocation) {
 
     // Add the object to the dom
     return swfobject.embedSWF(
-            (swflocation ? swflocation : jSocket.swf) + '?' + this.id,
+            (swflocation ? swflocation : JSocket.swf) + '?' + this.id,
             this.target,
             '0', // width
             '0', // height
             '9.0.0',
             'expressInstall.swf',
             // Flashvars
-            null,
+            false,
             // Params
             {'menu' : 'false'},
             // Attributes
             {}
     );
 
-}
+};
 
 /**
  * Connect to the specified host on the specified port
- * @param String {host} Hostname or ip to connect to
- * @param Int {port} Port to connect to on the given host
+ * @param {String} host Hostname or ip to connect to
+ * @param {int} port Port to connect to on the given host
  */
-jSocket.prototype.connect = function(host, port) {
+JSocket.prototype.connect = function(host, port) {
     if (!this.movie)
         throw "jSocket isn't ready yet, use the onReady event";
     if (this.connected)
         this.movie.close();
     this.movie.connect(host, port);
-}
+};
 
 /**
  * Close the current socket connection
  */
-jSocket.prototype.close = function() {
+JSocket.prototype.close = function() {
     this.connected = false;
     if (this.movie)
         this.movie.close();
-}
+};
 
 /**
  * Send data trough the socket to the server
- * @param Mixedvar {data} The data to be send to the sever
+ * @param {Object} data The data to be send to the sever
  */
-jSocket.prototype.write = function(data) {
+JSocket.prototype.write = function(data) {
     this.assertConnected();
     this.movie.write(data);
-}
+};
 
 /**
  * Make sure the socked is connected.
- * @throws Exception Throws an exception when the socket isn't connected
+ * @throws {Object} Throws an exception when the socket isn't connected
  */
-jSocket.prototype.assertConnected = function() {
+JSocket.prototype.assertConnected = function() {
     if (!this.connected || !this.movie)
-        throw "jSocket is not connected, use the onConnect event ";
-}
+        throw "JSocket 没连接";
+};
 
 /**
  * Callback that the flash object calls using externalInterface
- * @param String {name} What callback is called
- * @param String {id} Id of the socket
- * @param String {data} Used for data and errors
+ * @param {String} name What callback is called
+ * @param {String} id Id of the socket
+ * @param {String} data Used for data and errors
  */
-jSocket.flashCallback = function(name, id, data) {
+JSocket.flashCallback = function(name, id, data) {
     // Because the swf locks up untill the callback is done executing we want to get this over with asap!
     // http://www.calypso88.com/?p=25
     var f = function() {
-        jSocket.executeFlashCallback(name, id, data);
+        JSocket.executeFlashCallback(name, id, data);
     };
     setTimeout(f, 0);
-    return;
-}
+};
 
 /**
  * Execute the Callbacks
- * @param String {name} What callback is called
- * @param String {id} Id of the socket
- * @param String {data} Used for data and errors
+ * @param {String} name What callback is called
+ * @param {String} id Id of the socket
+ * @param {String} data Used for data and errors
  */
-jSocket.executeFlashCallback = function(name, id, data) {
-    var socket = jSocket.sockets[id];
+JSocket.executeFlashCallback = function(name, id, data) {
+    var socket = JSocket.sockets[id];
 
     switch (name) {
         // Callback for the flash object to signal the flash file is loaded
         // triggers jsXMLSocket.onReady
         case 'init':
-            var v = jSocket.variableTest;
+            var v = JSocket.variableTest;
             // Wait until we can actually set Variables in flash
             var f = function() {
                 var err = true;
@@ -208,4 +207,4 @@ jSocket.executeFlashCallback = function(name, id, data) {
         default:
             throw "jSocket: unknown callback '" + name + "' used";
     }
-}
+};

@@ -196,6 +196,9 @@ function im_genGroupChatWindow(container) {
                         case IM_CONSTANT.user_status.offline:
                             web.dom.insert(buddy_offline, node);
                             break;
+                        default:
+                            web.dom.insert(buddy_offline, node);
+                            break;
                     }
 
                     // 双击事件 出现单聊窗口
@@ -243,7 +246,24 @@ function im_genGroupChatWindow(container) {
             delete IM_CONSTANT.online_message[gid];
 
             // 删除tbox
-            starfish.toolkit.box.hide();
+            var tbox = web.className('tbox')[0];
+            var content = web.className('tcontent', tbox)[0];
+            var spans = $$(content, 'span');
+            var sp = null;
+            for (var j = 0; j < spans.length; j++) {
+                if (spans[j].getAttribute('lang') === gid) {
+                    sp = spans[j];
+                    break;
+                }
+            }
+            web.dom.dispose(sp); // 去除<span>
+            var message = $('hasMessage');
+            var h = parseInt(web.css(message, 'height'));
+            web.css(message, 'height', (h - 22) + 'px');
+
+            if (content.innerHTML.trim() === "") { // 没有内容了则 隐藏tbox
+                starfish.toolkit.box.hide();
+            }
         }
     }
 
@@ -307,17 +327,52 @@ function im_group_message(data) {
         var tbox = web.className('tbox')[0];
         var gid = parent.getAttribute('gid');
         var gname = parent.getAttribute('gname');
-        var options = {
-            html: (function(gid, gname) {
-                var html = [];
-                html.push('群组 <b>');
-                html.push(gname);
-                html.push('</b> 给您发来消息。<a href="#" onclick="im_showGroupMessage(\'' + gid + '\');">点击查看</a>');
-                return html.join('');
-            })(gid, gname),
-            animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
-        };
-        starfish.toolkit.box.show(options);
+        if (!tbox) {  // 第一次接收消息
+            var options = {
+                html: _gen(),
+                animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
+            };
+            starfish.toolkit.box.show(options);
+        } else {  // 已经接收过
+            var content = web.className('tcontent', tbox)[0];
+            if (content.innerHTML.trim() == "") {  // 没有提示正在显示
+                options = {
+                    html: _gen(),
+                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
+                };
+                starfish.toolkit.box.show(options);
+            } else {  // 有消息正在显示
+                var spans = $$(content, 'span');
+                var sp = null;
+                for (var i = 0; i <spans.length; i++) {
+                    if (spans[i].getAttribute('lang') === gid) {
+                        sp = spans[i];
+                        break;
+                    }
+                }
+
+                if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
+                    var strong = $$(sp, 'strong')[0];
+                    var n = parseInt(strong.innerHTML);
+                    strong.innerHTML = ++n;
+                } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
+                    var s = _gen();
+                    web.dom.insert(content, web.dom.parseDOM(s)[0]);
+                    var message = $('hasMessage');
+                    var h = parseInt(web.css(message, 'height'));
+                    web.css(message, 'height', (h + 22) + 'px');
+                }
+            }
+        }
+
+        function _gen() {
+            var html = [];
+            html.push('<span lang="' + gid + '">群组 <b>');
+            html.push(gname);
+            html.push('</b> 给您发来消息(<strong>1</strong>)。<a href="#" onclick="im_showGroupMessage(\'' + gid + '\');">点击查看</a>');
+            return html.join('');
+        }
+
     }
 }
 

@@ -527,7 +527,7 @@ function im_state() {
                 var command = IM_CONSTANT.command.status.state;
                 // 形如: state#*#uid#*#state
                 var message = command + IM_CONSTANT.hyphen + IM_CONSTANT.myself_id + IM_CONSTANT.hyphen + state;
-                // 发出消息
+                // 发出消息   回调方法 im_chgState()
                 IM_CONSTANT.socket.write(message);
             });
 

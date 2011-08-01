@@ -58,6 +58,7 @@ function im_message(data) {
                 // 把留言用户放到对应的callme div中
                 var userDiv = im_findByUid('buddy', from);
                 var oldParent = web.dom.parent(userDiv);
+                userDiv.setAttribute('old_state', oldParent.className); // 记录原来的state
                 var callmeDiv = web.dom.first(web.dom.parent(oldParent));
                 userDiv = web.dom.dispose(userDiv);
                 web.dom.insert(callmeDiv, userDiv);
@@ -101,17 +102,52 @@ function im_message(data) {
         var tbox = web.className('tbox')[0];
         var uid = parent.getAttribute('uid');
         var username = parent.getAttribute('username');
-        var options = {
-            html: (function(uid, username) {
-                var html = [];
-                html.push('用户 <b>');
-                html.push(username);
-                html.push('</b> 给您发来消息。<a href="#" onclick="im_showMessage(\'' + uid + '\');">点击查看</a>');
-                return html.join('');
-            })(uid, username),
-            animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
-        };
-        starfish.toolkit.box.show(options);
+        if (!tbox) {  // 第一次接收消息
+            var options = {
+                html: _gen(),
+                animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
+            };
+            starfish.toolkit.box.show(options);
+        } else {  // 已经接收过
+            var content = web.className('tcontent', tbox)[0];
+            if (content.innerHTML.trim() == "") {  // 没有提示正在显示
+                options = {
+                    html: _gen(),
+                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
+                };
+                starfish.toolkit.box.show(options);
+            } else {  // 有消息正在显示
+                var spans = $$(content, 'span');
+                var sp = null;
+                for (var i = 0; i <spans.length; i++) {
+                    if (spans[i].getAttribute('lang') === uid) {
+                        sp = spans[i];
+                        break;
+                    }
+                }
+
+                if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
+                    var strong = $$(sp, 'strong')[0];
+                    var n = parseInt(strong.innerHTML);
+                    strong.innerHTML = ++n;
+                } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
+                    var s = _gen();
+                    web.dom.insert(content, web.dom.parseDOM(s)[0]);
+                    var message = $('hasMessage');
+                    var h = parseInt(web.css(message, 'height'));
+                    web.css(message, 'height', (h + 22) + 'px');
+                }
+            }
+        }
+
+        function _gen() {
+            var html = [];
+            html.push('<span lang="' + uid + '">用户 <b>');
+            html.push(username);
+            html.push('</b> 给您发来消息(<strong>1</strong>)。<a href="#" onclick="im_showMessage(\'' + uid + '\');">点击查看</a></span>');
+            return html.join('');
+        }
+
     }
 
 }
@@ -280,7 +316,24 @@ function im_genChatWindow(container) {
             delete IM_CONSTANT.online_message[uid];
 
             // 删除tbox
-            starfish.toolkit.box.hide();
+            var tbox = web.className('tbox')[0];
+            var content = web.className('tcontent', tbox)[0];
+            var spans = $$(content, 'span');
+            var sp = null;
+            for (var j = 0; j < spans.length; j++) {
+                if (spans[j].getAttribute('lang') === uid) {
+                    sp = spans[j];
+                    break;
+                }
+            }
+            web.dom.dispose(sp); // 去除<span>
+            var message = $('hasMessage');
+            var h = parseInt(web.css(message, 'height'));
+            web.css(message, 'height', (h - 22) + 'px');
+
+            if (content.innerHTML.trim() === "") { // 没有内容了则 隐藏tbox
+                starfish.toolkit.box.hide();
+            }
 
             // 取消 头像晃动
             window.clearInterval(IM_CONSTANT.online_message_shake[uid]);
@@ -290,9 +343,14 @@ function im_genChatWindow(container) {
 
             // 把该用户放回对应的div
             var oldParent = web.dom.parent(o, 2);
-            var status = o.getAttribute('status');
-            var key = Object.keyOf(IM_CONSTANT.user_status, parseInt(status));
-            var div = web.className('buddy_' + key, oldParent)[0];
+
+            //var status = o.getAttribute('status');
+            //var key = Object.keyOf(IM_CONSTANT.user_status, parseInt(status));
+            //var div = web.className('buddy_' + key, oldParent)[0];
+
+            var status = o.getAttribute('old_state');
+            var div = web.className(status, oldParent)[0];
+
             o = web.dom.dispose(o);
             web.dom.insert(div, o);
         }
