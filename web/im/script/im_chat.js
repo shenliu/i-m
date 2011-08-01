@@ -167,6 +167,9 @@ function im_showMessage(uid) {
     im_genChatWindow(container);
 }
 
+//==================================================================================//
+//==================================================================================//
+
 /**
  * 生成 对话窗口
  * @param {Element}  container  双击的对象
@@ -265,11 +268,7 @@ function im_genChatWindow(container) {
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
             if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
-                var tip = web.className('chat_body_emptystring_tip', win)[0];
-                web.show(tip);
-                delay(function() {
-                    web.hide(tip);
-                }, 3000);
+                im_showWarningTips(win, "提示：消息内容不能为空，请输入内容。");
             } else {
                 var uid = o.getAttribute('uid');
                 var username = o.getAttribute('username');
@@ -358,8 +357,6 @@ function im_genChatWindow(container) {
 
 }
 
-///////////////////////////////////////
-
 /**
  * 使window在最前面显示
  * @param win
@@ -399,7 +396,7 @@ function im_genWindowBody(win, o, type) {
     html.push('<div class="chat_body_main_area">');
     html.push('    <div class="chat_body_chatboard">');
     html.push('        <div class="chat_body_msglist"></div>');
-    html.push('        <div class="chat_body_emptystring_tip">提示：消息内容不能为空，请输入内容。</div>');
+    html.push('        <div class="chat_body_emptystring_tip"></div>');
     html.push('    </div>');
     html.push('    <div class="chat_body_editor_toolbar" unselectable="on">');
     html.push('        <ul class="toolbar" unselectable="on">');
@@ -450,6 +447,19 @@ function im_genWindowBody(win, o, type) {
     html.push('    <div class="chat_body_toolbar">');
     html.push('        <div class="chat_body_toolbar_font_button" title="设置字体颜色和格式"></div>');
     html.push('        <div class="chat_body_toolbar_face_button" title="表情"></div>');
+    html.push('        <iframe id="uploadFilIframe" src="./domain.html" style="display:none;" name="uploadFilIframe"></iframe>');
+    html.push('        <form class="chat_body_toolbar_send_pic_form" enctype="multipart/form-data" method="POST" action="" target="uploadFilIframe" title="发送图片..." name="uploadSendPicfile">');
+    html.push('            <div class="chat_body_toolbar_send_pic_form_button" title="发送图片...">');
+    html.push('                <input type="hidden" name="callback" value="" />');
+    html.push('                <input class="f" type="file" name="file" value="" />');
+    html.push('            </div>');
+    html.push('        </form>');
+    html.push('        <form class="chat_body_toolbar_send_file_form" enctype="multipart/form-data" method="POST" action="" target="uploadFilIframe" title="发送文件..." name="uploadSendFilefile">');
+    html.push('            <div class="chat_body_toolbar_send_file_form_button" title="发送文件...">');
+    html.push('                <input class="f" type="file" name="file" value="" />');
+    html.push('            </div>');
+    html.push('        </form>');
+    html.push('        <div class="chat_body_toolbar_clear_button" title="清屏"></div>');
     html.push('        <a class="chat_body_toolbar_history_button" href="#" title="消息记录"></a>');
     html.push('    </div>');
     html.push('    <div class="chat_body_inputbox">');
@@ -699,6 +709,40 @@ function im_addEventWindow(win, o) {
         web.show(facePanel);
     });
 
+    // <input type='file' />添加发送图片onchange方法
+    var chat_body_toolbar_send_pic_form = web.className('chat_body_toolbar_send_pic_form', win)[0];
+    var pic_file = web.className('f', chat_body_toolbar_send_pic_form)[0];
+    web.event.addEvent(pic_file, 'change', function() {
+        var name = this.value;
+        var offset = name.lastIndexOf("\\") + 1;
+        name = name.slice(offset);   // 文件名称 不带路径
+        var ext = name.split('.')[1]; // 文件扩展名
+        // 不是图片格式
+        if (!IM_CONSTANT.image_type_allowable.contains(ext)) {
+            im_showWarningTips(win, "提示：请选择图片格式文件。");
+            return;
+        }
+
+        var fullpath = this.value;
+        if (starfish.client.browser.ie != 6) {
+            fullpath = this.files.item(0).mozFullPath;
+        }
+        console.log(fullpath);
+        var imgObj = new Image();
+        imgObj.src = fullpath;
+        var size = 0;
+        _size();
+
+        function _size() {
+            if (imgObj.readyState != 'complete') {
+                delay(_size, 500);
+                return false;
+            }
+            size = Math.round(imgObj.fileSize / 1024 * 100) / 100; //取得图片文件的大小
+            alert(size);
+        }
+    });
+
     // 解决ie下 回车 添加<p>的讨厌问题~~ 恨死ie!!!
     if (starfish.client.browser.ie) {
         var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
@@ -715,4 +759,27 @@ function im_addEventWindow(win, o) {
             }
         });
     }
+
+    // 清屏
+    var chat_body_toolbar_clear_button = web.className('chat_body_toolbar_clear_button', win)[0];
+    var chat_body_msglist = web.className('chat_body_msglist', win)[0];
+    web.event.addEvent(chat_body_toolbar_clear_button, 'click', function(e) {
+        chat_body_msglist.innerHTML = "";
+    });
+}
+
+/**
+ * 聊天窗口提示
+ * @param  {Element} win  元素
+ * @param  {String}  str  提示内容
+ */
+function im_showWarningTips(win, str) {
+    var web = starfish.web;
+
+    var tip = web.className('chat_body_emptystring_tip', win)[0];
+    tip.innerHTML = str;
+    web.show(tip);
+    delay(function() {
+        web.hide(tip);
+    }, 3000);
 }

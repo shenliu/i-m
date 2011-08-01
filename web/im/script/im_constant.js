@@ -43,6 +43,8 @@ var IM_CONSTANT = {
     fonts: ['宋体', '黑体', '隶书', '微软雅黑', '楷体_GB2312', '幼圆',
         'Arial', 'Arial Black', 'Times New Roman', 'Verdana'],
 
+    image_type_allowable: ['png', 'jpg', 'jpeg', 'gif', 'bmp'], // 允许的上传图片类型
+
     user_stylez: {    // 用户聊天样式
         family: "宋体"
         ,size: 10

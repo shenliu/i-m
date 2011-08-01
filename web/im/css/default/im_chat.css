@@ -202,7 +202,7 @@
     position: absolute;
     width: 100%;
     font-size: 15px;
-    text-align: center;
+    text-align: left;
 }
 
 /* 编辑工具条 */
@@ -383,6 +383,49 @@
 /* 表情 */
 .chat_body_toolbar_face_button {
     background: url("../sprite.png") no-repeat scroll -20px -60px transparent;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    height: 20px;
+    margin: 0 4px;
+    width: 20px;
+}
+
+/* 发送图片form */
+.chat_body_toolbar_send_pic_form, .chat_body_toolbar_send_file_form {
+    float: left;
+    height: 20px;
+    margin: 0 4px;
+    overflow: hidden;
+    padding: 0;
+    width: 20px;
+}
+
+.chat_body_toolbar_send_pic_form_button, .chat_body_toolbar_send_file_form_button {
+    background: url("../sprite.png") no-repeat scroll -60px -60px transparent;
+    cursor: pointer;
+    float: left;
+    height: 20px;
+    width: 20px;
+}
+
+.chat_body_toolbar_send_file_form_button {
+    background: url("../sprite.png") no-repeat scroll -40px -60px transparent;
+}
+
+.chat_body_toolbar_send_pic_form .f, .chat_body_toolbar_send_file_form .f {
+    cursor: pointer;
+    height: 25px;
+    margin: -2px 0 0 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    overflow: hidden;
+    width: 22px;
+}
+
+/* 清屏 */
+.chat_body_toolbar_clear_button {
+    background: url("../sprite.png") no-repeat scroll -80px -60px transparent;
     cursor: pointer;
     display: inline;
     float: left;

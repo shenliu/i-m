@@ -110,11 +110,7 @@ function im_genGroupChatWindow(container) {
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
             if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
-                var tip = web.className('chat_body_emptystring_tip', win)[0];
-                web.show(tip);
-                delay(function() {
-                    web.hide(tip);
-                }, 3000);
+                im_showWarningTips(win, "提示：消息内容不能为空，请输入内容。");
             } else {
                 // 对象o为 'div.im_group_list'
                 var chat_body_sidebar = web.className('chat_body_sidebar', win)[0];
@@ -269,6 +265,7 @@ function im_genGroupChatWindow(container) {
 
 }
 
+////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
 /**
