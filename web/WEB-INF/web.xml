@@ -7,8 +7,14 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- im mina server 启动 -->
     <listener>
         <listener-class>com.dfjq.pojo.im.listener.ImInitListener</listener-class>
+    </listener>
+
+    <!-- apache fileUpload cleanup -->
+    <listener>
+        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
     </listener>
 
     <!-- ====================================== -->
@@ -62,4 +68,16 @@
         <url-pattern>/im/deletegroup</url-pattern>
     </servlet-mapping>
 
+    <!-- ====================================== -->
+
+    <servlet>
+        <description>文件上传</description>
+        <servlet-name>fileupload</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>fileupload</servlet-name>
+        <url-pattern>/im/fileupload</url-pattern>
+    </servlet-mapping>
 </web-app>

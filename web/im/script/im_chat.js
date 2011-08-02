@@ -396,7 +396,7 @@ function im_genWindowBody(win, o, type) {
     html.push('<div class="chat_body_main_area">');
     html.push('    <div class="chat_body_chatboard">');
     html.push('        <div class="chat_body_msglist"></div>');
-    html.push('        <div class="chat_body_emptystring_tip"></div>');
+    html.push('        <div class="chat_body_empty_string_tip"></div>');
     html.push('    </div>');
     html.push('    <div class="chat_body_editor_toolbar" unselectable="on">');
     html.push('        <ul class="toolbar" unselectable="on">');
@@ -447,14 +447,15 @@ function im_genWindowBody(win, o, type) {
     html.push('    <div class="chat_body_toolbar">');
     html.push('        <div class="chat_body_toolbar_font_button" title="设置字体颜色和格式"></div>');
     html.push('        <div class="chat_body_toolbar_face_button" title="表情"></div>');
-    html.push('        <iframe id="uploadFilIframe" src="./domain.html" style="display:none;" name="uploadFilIframe"></iframe>');
-    html.push('        <form class="chat_body_toolbar_send_pic_form" enctype="multipart/form-data" method="POST" action="" target="uploadFilIframe" title="发送图片..." name="uploadSendPicfile">');
+    html.push('        <iframe src="./domain.html?d=' + String.uniqueID() + '" style="display:none;" name="uploadFileIframe"></iframe>');
+    html.push('        <form class="chat_body_toolbar_send_pic_form" enctype="multipart/form-data" method="POST" action="" target="uploadFileIframe" title="发送图片...">');
     html.push('            <div class="chat_body_toolbar_send_pic_form_button" title="发送图片...">');
-    html.push('                <input type="hidden" name="callback" value="" />');
-    html.push('                <input class="f" type="file" name="file" value="" />');
+    html.push('                <input type="hidden" name="callback" value="callBackPic" />');
+    html.push('                <input type="hidden" name="win" value="" />');
+    html.push('                <input class="f" type="file" name="file" />');
     html.push('            </div>');
     html.push('        </form>');
-    html.push('        <form class="chat_body_toolbar_send_file_form" enctype="multipart/form-data" method="POST" action="" target="uploadFilIframe" title="发送文件..." name="uploadSendFilefile">');
+    html.push('        <form class="chat_body_toolbar_send_file_form" enctype="multipart/form-data" method="POST" action="" target="uploadFilIframe" title="发送文件...">');
     html.push('            <div class="chat_body_toolbar_send_file_form_button" title="发送文件...">');
     html.push('                <input class="f" type="file" name="file" value="" />');
     html.push('            </div>');
@@ -718,29 +719,36 @@ function im_addEventWindow(win, o) {
         name = name.slice(offset);   // 文件名称 不带路径
         var ext = name.split('.')[1]; // 文件扩展名
         // 不是图片格式
-        if (!IM_CONSTANT.image_type_allowable.contains(ext)) {
+        if (!IM_CONSTANT.image_type_allowable.contains(ext.toLowerCase())) {
             im_showWarningTips(win, "提示：请选择图片格式文件。");
             return;
         }
-
-        var fullpath = this.value;
-        if (starfish.client.browser.ie != 6) {
-            fullpath = this.files.item(0).mozFullPath;
+        var size = 0; //取得图片文件的大小(KB)
+        if (starfish.client.browser.ie) {  // ie
+            var fullpath = this.value;
+            var imgObj = new Image();
+            imgObj.onload = function() {
+                size = imgObj.fileSize;
+            };
+            imgObj.src = fullpath;
+        } else {  // other browsers
+            size = this.files[0].size;
         }
-        console.log(fullpath);
-        var imgObj = new Image();
-        imgObj.src = fullpath;
-        var size = 0;
-        _size();
-
-        function _size() {
-            if (imgObj.readyState != 'complete') {
-                delay(_size, 500);
-                return false;
-            }
-            size = Math.round(imgObj.fileSize / 1024 * 100) / 100; //取得图片文件的大小
-            alert(size);
+        var size_kb = Math.round(size / 1024 * 100) / 100;  // 转换为KB
+        if (size_kb > IM_CONSTANT.image_maxSize_allowable) {
+            im_showWarningTips(win, "提示：上传的图片请小于 "
+                    + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
+            return;
         }
+
+        // 设置隐藏域<input type='hidden' name='win'>的value值为该窗口的id值
+        var window = web.dom.prev(this);
+        window.value = win.id;
+
+        // 开始上传图片
+        var form = web.className('chat_body_toolbar_send_pic_form', win)[0];
+        form.action = IM_CONSTANT.servlet_path + "im/fileupload";
+        form.submit();  // 调用回调函数 -> callBackPic
     });
 
     // 解决ie下 回车 添加<p>的讨厌问题~~ 恨死ie!!!
@@ -776,10 +784,22 @@ function im_addEventWindow(win, o) {
 function im_showWarningTips(win, str) {
     var web = starfish.web;
 
-    var tip = web.className('chat_body_emptystring_tip', win)[0];
+    var tip = web.className('chat_body_empty_string_tip', win)[0];
     tip.innerHTML = str;
     web.show(tip);
     delay(function() {
         web.hide(tip);
     }, 3000);
+}
+
+/**
+ * 上传图片的回调函数
+ * @param  {String} id  窗口id
+ * @param  {String}  path  图片路径
+ */
+function callBackPic(id, path) {
+    var web = starfish.web;
+    var win = $(id);
+    var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+    chat_body_inputbox_rich_editor_div.innerHTML += '<img src="' + path + '" />';
 }

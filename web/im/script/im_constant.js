@@ -45,6 +45,10 @@ var IM_CONSTANT = {
 
     image_type_allowable: ['png', 'jpg', 'jpeg', 'gif', 'bmp'], // 允许的上传图片类型
 
+    image_maxSize_allowable: 1024, // 允许最大的上传图片大小 KB
+
+    file_maxSize_allowable: 5 * 1024, // 允许最大的上传文件大小 KB
+
     user_stylez: {    // 用户聊天样式
         family: "宋体"
         ,size: 10

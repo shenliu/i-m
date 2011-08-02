@@ -188,7 +188,7 @@
 }
 
 /* 发送空字符串 警告栏 */
-.chat_body_emptystring_tip {
+.chat_body_empty_string_tip {
     background: none repeat scroll 0 0 #ffffcc;
     border-top: 1px solid #cccccc;
     bottom: 0;
