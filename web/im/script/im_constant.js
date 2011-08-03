@@ -47,7 +47,7 @@ var IM_CONSTANT = {
 
     image_maxSize_allowable: 1024, // 允许最大的上传图片大小 KB
 
-    file_maxSize_allowable: 5 * 1024, // 允许最大的上传文件大小 KB
+    file_maxSize_allowable: 10 * 1024, // 允许最大的上传文件大小 KB
 
     user_stylez: {    // 用户聊天样式
         family: "宋体"

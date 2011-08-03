@@ -755,6 +755,11 @@ function im_addEventWindow(win, o) {
     var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
     // 上传文件拖拽
     if ('FileReader' in window) {
+        web.event.addEvent(chat_body_inputbox_rich_editor_div, 'dragover', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+
         web.event.addEvent(chat_body_inputbox_rich_editor_div, 'drop', function(e) {
             e.stopPropagation();
             e.preventDefault();
@@ -776,15 +781,63 @@ function im_addEventWindow(win, o) {
                     }
                     callback = "callBackFile";
                 }
-                _processXHR(f, callback, win.id);
+
+                var outer = web.dom.elem('div');
+                outer.className = "progressBarDiv";
+                var name = web.dom.elem('span');
+                var progressbar = web.dom.elem('div');
+                name.innerHTML = f.name;
+                web.dom.insert(outer, name);
+                web.dom.insert(outer, progressbar);
+                web.dom.insert(this, outer);
+
+                _processXHR(f, progressbar, callback);
             }
 
-            function _processXHR(file, callback, wid) {
+            function _processXHR(file, progressbar, callback) {
                 var xhr = new XMLHttpRequest(), xhrupload = xhr.upload;
+
+                var span = web.dom.elem('span');
+                span.textContent = "0%";
+                web.dom.insert(progressbar, span);
+                xhrupload.progressbar = progressbar;
+
+                var bar = web.dom.first(progressbar);
+
+                // 上传中~~
+                web.event.addEvent(xhrupload, "progress", function(ex) {
+                    if (ex.lengthComputable) {
+                        // 将进度换算成百分比
+                        var percentage = Math.round((ex.loaded * 100) / ex.total);
+                        //console.log("percentage:" + percentage);
+                        if (percentage < 100) {
+                            web.css(bar, 'width', (percentage * 2) + "px");
+                            bar.textContent = percentage + "%";
+                        }
+                    }
+                });
+
+                // 上传完毕
+                web.event.addEvent(xhrupload, "load", function(ex) {
+                    web.css(bar, 'width', "200px");
+                    bar.textContent = "100%";
+                    // fade~~
+                    var div = web.dom.parent(ex.target.progressbar);
+                    starfish.toolkit.fade.init(div, -1, 0.1);
+                    // 删除 进度条
+                    web.dom.dispose(div);
+                });
+
+                // 上传错误
+                web.event.addEvent(xhrupload, "error", function(ex) {
+                    console.log("error: " + ex.message);
+                });
+
                 xhr.onreadystatechange = function(evt) {
                     _XHR_state_change_handler(xhr, evt);
                 };
-                var param = "?fn=" + file.name + "&cb=" + callback + "&w=" + wid;
+
+                var param = "?fn=" + file.name + "&cb=" + callback + "&w=" + win.id;
                 xhr.open("POST", IM_CONSTANT.servlet_path + "im/fileuploaddd" + param);
                 xhr.overrideMimeType("application/octet-stream");
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=----" + new Date().getTime());
