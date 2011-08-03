@@ -1,5 +1,6 @@
 package com.dfjq.pojo.im.servlet;
 
+import com.dfjq.pojo.im.Constant;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -19,9 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class FileUploadServlet extends HttpServlet {
+public class FileUploadFormServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory
-            .getLogger(FileUploadServlet.class);
+            .getLogger(FileUploadFormServlet.class);
 
     @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,16 +30,12 @@ public class FileUploadServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter();
 
-        long max_file_size = 10 * 1024 * 1024; // 10MB
-
-        String upload_path = "/im/upload";
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String date = sdf.format(new Date());
 
         // 如果在应用根目录下没有用于存储上传文件的目录,则创建该目录
         // 目录结构: /im/upload/yyyymmdd/
-        String path = getServletContext().getRealPath(upload_path + "/" + date);
+        String path = getServletContext().getRealPath(Constant.UPLOAD_BASE_PATH + "/" + date);
         File uploadDir = new File(path);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
@@ -48,7 +45,7 @@ public class FileUploadServlet extends HttpServlet {
         // 小于指定尺寸（默认10KB）的文件直接保存在内存中，否则保存在磁盘临时文件夹
         factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
         // 设置处理上传文件时保存临时文件的临时文件夹，没有指定则采用系统默认临时文件夹
-        File tempDir = new File(getServletContext().getRealPath(upload_path + "/temp"));
+        File tempDir = new File(getServletContext().getRealPath(Constant.UPLOAD_BASE_PATH + "/temp"));
         if (!tempDir.exists()) {
             tempDir.mkdirs();
         }
@@ -57,10 +54,10 @@ public class FileUploadServlet extends HttpServlet {
         ServletFileUpload uploader = new ServletFileUpload(factory);
 
         // 设置单个上传文件的最大尺寸限制，参数为以字节为单位的long型数字
-        uploader.setFileSizeMax(max_file_size);
+        uploader.setFileSizeMax(Constant.MAX_FILE_SIZE);
 
         // 上传总尺寸
-        uploader.setSizeMax(max_file_size);
+        uploader.setSizeMax(Constant.MAX_FILE_SIZE);
 
         // 设置字符编码
         uploader.setHeaderEncoding("UTF-8");
@@ -97,7 +94,7 @@ public class FileUploadServlet extends HttpServlet {
                     logger.error(e.getMessage());
                     return;
                 }
-                serverPath = request.getContextPath() + upload_path + "/" + date + "/" + fileName;
+                serverPath = request.getContextPath() + Constant.UPLOAD_BASE_PATH + "/" + date + "/" + fileName;
             }
         }
 

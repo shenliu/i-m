@@ -71,13 +71,27 @@
     <!-- ====================================== -->
 
     <servlet>
-        <description>文件上传</description>
-        <servlet-name>fileupload</servlet-name>
-        <servlet-class>com.dfjq.pojo.im.servlet.FileUploadServlet</servlet-class>
+        <description>表单文件上传</description>
+        <servlet-name>fileuploadform</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.FileUploadFormServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>fileupload</servlet-name>
-        <url-pattern>/im/fileupload</url-pattern>
+        <servlet-name>fileuploadform</servlet-name>
+        <url-pattern>/im/fileuploadform</url-pattern>
     </servlet-mapping>
+
+    <!-- ====================================== -->
+
+    <servlet>
+        <description>拖拽文件上传</description>
+        <servlet-name>fileuploaddd</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.FileUploadDDServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>fileuploaddd</servlet-name>
+        <url-pattern>/im/fileuploaddd</url-pattern>
+    </servlet-mapping>
+
 </web-app>

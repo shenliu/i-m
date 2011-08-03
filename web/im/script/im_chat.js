@@ -714,30 +714,8 @@ function im_addEventWindow(win, o) {
     var chat_body_toolbar_send_pic_form = web.className('chat_body_toolbar_send_pic_form', win)[0];
     var pic_file = web.className('f', chat_body_toolbar_send_pic_form)[0];
     web.event.addEvent(pic_file, 'change', function() {
-        var name = this.value;
-        var offset = name.lastIndexOf("\\") + 1;
-        name = name.slice(offset);   // 文件名称 不带路径
-        var ext = name.split('.')[1]; // 文件扩展名
-        // 不是图片格式
-        if (!IM_CONSTANT.image_type_allowable.contains(ext.toLowerCase())) {
+        if (!_isImage(this.value)) {  // 不是图片
             im_showWarningTips(win, "提示：请选择图片格式文件。");
-            return;
-        }
-        var size = 0; //取得图片文件的大小(KB)
-        if (starfish.client.browser.ie) {  // ie
-            var fullpath = this.value;
-            var imgObj = new Image();
-            imgObj.onload = function() {
-                size = imgObj.fileSize;
-            };
-            imgObj.src = fullpath;
-        } else {  // other browsers
-            size = this.files[0].size;
-        }
-        var size_kb = Math.round(size / 1024 * 100) / 100;  // 转换为KB
-        if (size_kb > IM_CONSTANT.image_maxSize_allowable) {
-            im_showWarningTips(win, "提示：上传的图片请小于 "
-                    + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
             return;
         }
 
@@ -746,14 +724,119 @@ function im_addEventWindow(win, o) {
         window.value = win.id;
 
         // 开始上传图片
-        var form = web.className('chat_body_toolbar_send_pic_form', win)[0];
-        form.action = IM_CONSTANT.servlet_path + "im/fileupload";
-        form.submit();  // 调用回调函数 -> callBackPic
+        chat_body_toolbar_send_pic_form.action = IM_CONSTANT.servlet_path + "im/fileuploadform";
+
+        var size;  //取得图片文件的大小(字节)
+        if (starfish.client.browser.ie) {  // ie
+            var fullpath = this.value;
+            var imgObj = new Image();
+            imgObj.onload = function() {
+                size = imgObj.fileSize;
+                if (_isSizeExceed('image', size)) {  // 大小超过规定
+                    im_showWarningTips(win, "提示：上传的图片请小于 "
+                            + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
+                    return;
+                }
+                chat_body_toolbar_send_pic_form.submit();  // 调用回调函数 -> callBackPic
+            };
+            imgObj.src = fullpath;
+        } else {  // other browsers
+            size = this.files[0].size;
+            if (_isSizeExceed('image', size)) {  // 大小超过规定
+                im_showWarningTips(win, "提示：上传的图片请小于 "
+                        + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
+                return;
+            }
+            chat_body_toolbar_send_pic_form.submit();  // 调用回调函数 -> callBackPic
+        }
+
     });
+
+    var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+    // 上传文件拖拽
+    if ('FileReader' in window) {
+        web.event.addEvent(chat_body_inputbox_rich_editor_div, 'drop', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var callback, w;
+            var files = e.dataTransfer.files;
+            for (var i = 0, f; f = files[i]; i++) {
+                if (_isImage(f.name)) {  // 图片
+                    if (_isSizeExceed('image', f.size)) {  // 大小超过规定
+                        im_showWarningTips(win, "提示：上传的图片请小于 "
+                                + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
+                        return;
+                    }
+                    callback = "callBackPic";
+                } else {   // 文件
+                    if (_isSizeExceed('file', f.size)) {  // 大小超过规定
+                        im_showWarningTips(win, "提示：上传的文件请小于 "
+                                + (IM_CONSTANT.file_maxSize_allowable / 1024) + " Mb。");
+                        return;
+                    }
+                    callback = "callBackFile";
+                }
+                _processXHR(f, callback, win.id);
+            }
+
+            function _processXHR(file, callback, wid) {
+                var xhr = new XMLHttpRequest(), xhrupload = xhr.upload;
+                xhr.onreadystatechange = function(evt) {
+                    _XHR_state_change_handler(xhr, evt);
+                };
+                var param = "?fn=" + file.name + "&cb=" + callback + "&w=" + wid;
+                xhr.open("POST", IM_CONSTANT.servlet_path + "im/fileuploaddd" + param);
+                xhr.overrideMimeType("application/octet-stream");
+                xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=----" + new Date().getTime());
+                if (xhr.sendAsBinary) {  //firefox支持sendAsBinary
+                    xhr.sendAsBinary(file.getAsBinary());
+                } else { // 只支持send
+                    xhr.send(file);
+                }
+            }
+
+            function _XHR_state_change_handler(xhr, evt) {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        var result = xhr.responseText;
+                        var o = eval('(' + result + ')');
+                        var fn = o['fn'];
+                        var param = o['param'];
+                        fn.apply(null, param);
+                    }
+                }
+            }
+
+        });
+
+    }
+
+    // 判断是否为图片格式
+    function _isImage(name) {
+        var offset = name.lastIndexOf("\\") + 1;
+        name = name.slice(offset);   // 文件名称 不带路径
+        var ext = name.split('.')[1]; // 文件扩展名
+        return IM_CONSTANT.image_type_allowable.contains(ext.toLowerCase());
+    }
+
+    /**
+     * 判断文件尺寸是否超过规定大小
+     * @param  {String}  type  文件或图片
+     * @param  {number}  size  文件尺寸
+     */
+    function _isSizeExceed(type, size) {
+        var size_kb = Math.round(size / 1024 * 100) / 100;  // 转换为KB
+        if (type == 'file') {
+            return size_kb > IM_CONSTANT.file_maxSize_allowable;
+        } else if (type == 'image') {
+            return size_kb > IM_CONSTANT.image_maxSize_allowable;
+        } else {
+            return false;
+        }
+    }
 
     // 解决ie下 回车 添加<p>的讨厌问题~~ 恨死ie!!!
     if (starfish.client.browser.ie) {
-        var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
         web.event.addEvent(chat_body_inputbox_rich_editor_div, 'keypress', function(e) {
             if (e.keyCode == 13) {  // 替换 回车
                 var sel = this.document.selection;
@@ -802,4 +885,10 @@ function callBackPic(id, path) {
     var win = $(id);
     var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
     chat_body_inputbox_rich_editor_div.innerHTML += '<img src="' + path + '" />';
+}
+
+function callBackFile(id, path) {
+    var web = starfish.web;
+    var win = $(id);
+
 }
