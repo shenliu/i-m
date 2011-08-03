@@ -204,9 +204,13 @@ function im_genGroupChatWindow(container) {
                         if (uid == IM_CONSTANT.myself_id) { // 是自己不显示窗口
                             return;
                         }
-                        var win = $('window_' + IM_CONSTANT.myself_id + "_" + uid);
-                        if (!win) {
+                        var select_win = $('window_' + IM_CONSTANT.myself_id + "_" + uid);
+                        if (!select_win) {
                             im_genChatWindow(self);
+                        } else { // 已经存在win 但要把它显示在最前面
+                            web.css(select_win, 'zIndex', 30);
+                            web.css(win, 'zIndex', 25);
+                            IM_CONSTANT.last_chatwindow = select_win;
                         }
                     });
 
