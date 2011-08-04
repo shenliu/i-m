@@ -35,7 +35,7 @@ var IM_CONSTANT = {
 
     last_chatwindow: null, // 记录上一次的 chatwindow 对象 使其他chatwindow可以在最上层显示(z-index)
 
-    server_host: '',
+    server_host: '',   // 在im_constant_url.js中定义
     server_port: 2528,
 
     socket: null, // jsocket 实例对象
@@ -47,9 +47,9 @@ var IM_CONSTANT = {
 
     image_maxSize_allowable: 1024, // 允许最大的上传图片大小 KB
 
-    file_maxSize_allowable: 10 * 1024, // 允许最大的上传文件大小 KB
+    file_maxSize_allowable: 100 * 1024, // 允许最大的上传文件大小 KB
 
-    user_stylez: {    // 用户聊天样式
+    user_stylez: {    // 用户聊天样式(默认值)
         family: "宋体"
         ,size: 10
         ,weight: false

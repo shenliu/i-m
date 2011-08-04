@@ -232,11 +232,6 @@ function im_showMyself() {
     my_panel_signature.value = mySign;
 }
 
-// 屏蔽 右键菜单
-document.oncontextmenu = function() {
-    return false;
-};
-
 // ie 拖拽不选择
 if (starfish.client.browser.ie) {
     starfish.web.event.addEvent(document, 'selectstart', function() {

@@ -132,7 +132,11 @@ function im_dialog(options) {
 function im_rightMenu(src, menus, options) {
     var web = starfish.web;
 
+    // 右键 弹出菜单 事件
     web.event.addEvent(src, 'contextmenu', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
         // 先 去除上一次的菜单
         var div = web.className('group_list_menu_div')[0];
         if (div) {

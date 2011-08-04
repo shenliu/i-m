@@ -699,15 +699,23 @@ function im_addEventWindow(win, o) {
     var facePanel = web.className('im_facePanel')[0];
     var chat_body_toolbar_face_button = web.className('chat_body_toolbar_face_button', win)[0];
     web.event.addEvent(chat_body_toolbar_face_button, 'click', function(e) {
-        var left = web.window.mouseX(e);
-        var top = web.window.mouseY(e);
-        var width = web.window.fullWidth(facePanel);
-        var height = web.window.fullHeight(facePanel);
-        web.css(facePanel, 'left', (left - width / 2) + 'px');
-        web.css(facePanel, 'top', (top - height - web.window.getElementY(e)) + 'px');
-        // !!! 记录这个列表是哪个窗口调用的 所有窗口共享同一个facePanel !!!
-        facePanel.setAttribute('caller', win.id);
-        web.show(facePanel);
+        if (web.css(facePanel, 'display') === 'none') {
+            var left = web.window.mouseX(e);
+            var top = web.window.mouseY(e);
+            var width = web.window.fullWidth(facePanel);
+            var height = web.window.fullHeight(facePanel);
+            var l = left - width / 2;
+            var t = top - height - web.window.getElementY(e);
+            l = l < 0 ? 0 : l;
+            t = t < 0 ? 0 : t;
+            web.css(facePanel, 'left', l + 'px');
+            web.css(facePanel, 'top', t + 'px');
+            // !!! 记录这个列表是哪个窗口调用的 所有窗口共享同一个facePanel !!!
+            facePanel.setAttribute('caller', win.id);
+            web.show(facePanel);
+        } else {
+            web.hide(facePanel);
+        }
     });
 
     // <input type='file' />添加发送图片onchange方法
