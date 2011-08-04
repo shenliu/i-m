@@ -116,10 +116,7 @@ function im_createGroup(gid, gname, gdesc) {
                 starfish.toolkit.overlay.hide();
 
                 // 显示 添加成功
-                starfish.toolkit.box.show({
-                    html: '群组 <b>' + gname + '</b> 已经创建',
-                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:5,top:5
-                });
+                im_showBox('群组 <b>' + gname + '</b> 已经创建', 'hasMessage', 5);
 
                 // 重新显示 群组列表
                 im_displayGroup();
@@ -270,10 +267,7 @@ function im_deleteGroup(gid, gname) {
                 }
 
                 // 显示 删除成功
-                starfish.toolkit.box.show({
-                    html: '群组 <b>' + gname + '</b> 已经删除',
-                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:5,top:5
-                });
+                im_showBox('群组 <b>' + gname + '</b> 已经删除', 'hasMessage', 5);
 
                 // 重新显示 群组列表
                 im_displayGroup();
@@ -411,10 +405,7 @@ function im_memberGroup(gid, gname) {
                     var uid = li.getAttribute('uid');
                     if (web.hasClass(li, 'im_member_list_member_selected')) {
                         if (uid === IM_CONSTANT.myself_id) { // 不能移除群组创建人
-                            starfish.toolkit.box.show({
-                                html: '不能移除群组创建人',
-                                animate:true,close:false,mask:false,boxid:'hasWaining',autohide:5,top:5
-                            });
+                            im_showBox('不能移除群组创建人', 'hasWaining', 5);
                         } else {
                             web.removeClass(li, 'im_member_list_member_selected');
                             selectedMembers.erase(uid);
@@ -462,10 +453,7 @@ function im_memberGroup(gid, gname) {
             if (result.trim() == 'true') {
                 _cancel();
                 // 显示 成功
-                starfish.toolkit.box.show({
-                    html: '群组成员已经修改',
-                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:5,top:5
-                });
+                im_showBox('群组成员已经修改', 'hasMessage', 5);
             }
         }, null);
     });
@@ -514,10 +502,7 @@ function im_quitGroup(gid, gname) {
                 }
 
                 // 显示 退出成功
-                starfish.toolkit.box.show({
-                    html: '您已经退出了 <b>' + gname + '</b> 群组',
-                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:5,top:5
-                });
+                im_showBox('您已经退出了 <b>' + gname + '</b> 群组', 'hasMessage', 5);
 
                 // 重新显示 群组列表
                 im_displayGroup();

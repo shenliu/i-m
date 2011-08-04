@@ -103,19 +103,11 @@ function im_message(data) {
         var uid = parent.getAttribute('uid');
         var username = parent.getAttribute('username');
         if (!tbox) {  // 第一次接收消息
-            var options = {
-                html: _gen(),
-                animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
-            };
-            starfish.toolkit.box.show(options);
+            im_showBox(_gen(), 'hasMessage');
         } else {  // 已经接收过
             var content = web.className('tcontent', tbox)[0];
             if (content.innerHTML.trim() == "") {  // 没有提示正在显示
-                options = {
-                    html: _gen(),
-                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
-                };
-                starfish.toolkit.box.show(options);
+                im_showBox(_gen(), 'hasMessage');
             } else {  // 有消息正在显示
                 var spans = $$(content, 'span');
                 var sp = null;
@@ -265,6 +257,10 @@ function im_genChatWindow(container) {
         });
 
         function _event(e) {
+            if ('uploading' in win && !win.getAttribute('uploading')) {
+                return;
+            }
+
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
             if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
@@ -811,7 +807,6 @@ function im_addEventWindow(win, o) {
                 xhrupload.progressbar = progressbar;
 
                 var bar = web.dom.first(progressbar);
-
                 // 上传中~~
                 web.event.addEvent(xhrupload, "progress", function(ex) {
                     if (ex.lengthComputable) {
@@ -829,11 +824,14 @@ function im_addEventWindow(win, o) {
                 web.event.addEvent(xhrupload, "load", function(ex) {
                     web.css(bar, 'width', "200px");
                     bar.textContent = "100%";
-                    // fade~~
                     var div = web.dom.parent(ex.target.progressbar);
-                    starfish.toolkit.fade.init(div, -1, 0.1);
+
+                    // fade~~
+                    //starfish.toolkit.fade.init(div, -1, 0.1);
+
                     // 删除 进度条
                     web.dom.dispose(div);
+                    win.setAttribute("uploading", false);
                 });
 
                 // 上传错误
@@ -854,6 +852,9 @@ function im_addEventWindow(win, o) {
                 } else { // 只支持send
                     xhr.send(file);
                 }
+
+                // !!! 设置窗口的uploading属性为true, 在上传时不能发送消息; 关闭窗口时要检验该值是否为false !!!
+                win.setAttribute("uploading", true);
             }
 
             function _XHR_state_change_handler(xhr, evt) {

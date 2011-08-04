@@ -329,19 +329,11 @@ function im_group_message(data) {
         var gid = parent.getAttribute('gid');
         var gname = parent.getAttribute('gname');
         if (!tbox) {  // 第一次接收消息
-            var options = {
-                html: _gen(),
-                animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
-            };
-            starfish.toolkit.box.show(options);
+            im_showBox(_gen(), 'hasMessage');
         } else {  // 已经接收过
             var content = web.className('tcontent', tbox)[0];
             if (content.innerHTML.trim() == "") {  // 没有提示正在显示
-                options = {
-                    html: _gen(),
-                    animate:true,close:false,mask:false,boxid:'hasMessage',autohide:0,top:5
-                };
-                starfish.toolkit.box.show(options);
+                im_showBox(_gen(), 'hasMessage');
             } else {  // 有消息正在显示
                 var spans = $$(content, 'span');
                 var sp = null;

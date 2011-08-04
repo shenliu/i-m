@@ -587,3 +587,22 @@ function im_chgState(data) {
         // 单聊窗口
     }
 }
+
+/**
+ * 显示 box提示
+ * @param   {String}  str  提示的消息
+ * @param   {String}  clazz  提示样式
+ * @param   {int}  hide  自动消失时间间隔
+ */
+function im_showBox(str, clazz, hide) {
+    var options = {
+        html: str,
+        animate: true,
+        close: false,
+        mask: false,
+        boxid: clazz,
+        autohide: hide || 0,
+        top: 5
+    };
+    starfish.toolkit.box.show(options);
+}
