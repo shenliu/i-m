@@ -107,9 +107,15 @@ function im_genGroupChatWindow(container) {
         });
 
         function _event(e) {
+            // 正在上传文件 不能发送消息
+            if (win.getAttribute('uploading') != null && win.getAttribute('uploading') === true) {
+                im_showBox('有文件正在上传，请等待上传结束后再发送消息。', 'hasAttention', 5);
+                return;
+            }
+
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
-            if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
+            if (val.replace(/(&nbsp;)*/g, '') == "") {  // 空信息
                 im_showWarningTips(win, "提示：消息内容不能为空，请输入内容。");
             } else {
                 // 对象o为 'div.im_group_list'

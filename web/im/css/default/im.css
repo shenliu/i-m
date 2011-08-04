@@ -24,12 +24,12 @@ body {
 }
 
 /* 消息提醒 */
-#hasMessage, #hasWaining {
+#hasMessage, #hasAttention, #hasWarning {
     background: #2ea125;
     color: #fff;
     text-shadow: 1px 1px #1b6116;
-    border-right: 1px solid #000;
-    border-bottom: 1px solid #000;
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
     padding: 10px;
     -moz-border-radius: 0;
     -khtml-border-radius: 0;
@@ -39,13 +39,20 @@ body {
     filter: alpha(opacity=75);
 }
 
-#hasWaining {
-    background: #ff6969;
+#hasWarning {
+    background: #ff0033;
     opacity: 0.95;
     filter: alpha(opacity=95);
 }
 
-#hasMessage a, #hasWaining a {
+#hasAttention {
+    background: #ffff33;
+    opacity: 0.95;
+    filter: alpha(opacity=95);
+    color: #999966;
+}
+
+#hasMessage a, #hasWarning a {
     color: #fff;
 }
 

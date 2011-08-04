@@ -257,13 +257,15 @@ function im_genChatWindow(container) {
         });
 
         function _event(e) {
-            if ('uploading' in win && !win.getAttribute('uploading')) {
+            // 正在上传文件 不能发送消息
+            if (win.getAttribute('uploading') != null && win.getAttribute('uploading') === true) {
+                im_showBox('有文件正在上传，请等待上传结束后再发送消息。', 'hasAttention', 5);
                 return;
             }
 
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
-            if (val.replace(/&nbsp;/g, '') == "") {  // 空信息
+            if (val.replace(/(&nbsp;)*/g, '') === "") {  // 空信息
                 im_showWarningTips(win, "提示：消息内容不能为空，请输入内容。");
             } else {
                 var uid = o.getAttribute('uid');
@@ -734,24 +736,24 @@ function im_addEventWindow(win, o) {
         if (starfish.client.browser.ie) {  // ie
             var fullpath = this.value;
             var imgObj = new Image();
-            imgObj.onload = function() {
+            imgObj.onload = function() {    // 必须写到这里
                 size = imgObj.fileSize;
-                if (_isSizeExceed('image', size)) {  // 大小超过规定
-                    im_showWarningTips(win, "提示：上传的图片请小于 "
-                            + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
-                    return;
-                }
-                chat_body_toolbar_send_pic_form.submit();  // 调用回调函数 -> callBackPic
+                _process();
             };
             imgObj.src = fullpath;
         } else {  // other browsers
             size = this.files[0].size;
+            _process();
+        }
+
+        function _process() {
             if (_isSizeExceed('image', size)) {  // 大小超过规定
                 im_showWarningTips(win, "提示：上传的图片请小于 "
                         + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
                 return;
             }
             chat_body_toolbar_send_pic_form.submit();  // 调用回调函数 -> callBackPic
+            win.setAttribute("uploading", true);
         }
 
     });
@@ -947,6 +949,7 @@ function callBackPic(id, path) {
     var win = $(id);
     var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
     chat_body_inputbox_rich_editor_div.innerHTML += '<img src="' + path + '" />';
+    win.setAttribute('uploading', false);
 }
 
 function callBackFile(id, path) {

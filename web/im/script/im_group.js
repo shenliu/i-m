@@ -405,7 +405,7 @@ function im_memberGroup(gid, gname) {
                     var uid = li.getAttribute('uid');
                     if (web.hasClass(li, 'im_member_list_member_selected')) {
                         if (uid === IM_CONSTANT.myself_id) { // 不能移除群组创建人
-                            im_showBox('不能移除群组创建人', 'hasWaining', 5);
+                            im_showBox('不能移除群组创建人', 'hasWarning', 5);
                         } else {
                             web.removeClass(li, 'im_member_list_member_selected');
                             selectedMembers.erase(uid);
