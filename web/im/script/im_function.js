@@ -615,19 +615,19 @@ function im_transferFile(data) {
         msglist_div.scrollTop = msglist_div.scrollHeight;
     } else { // 窗口没有打开
         // 判断是否有多条消息
-        if (IM_CONSTANT.online_message[uid]) {
-            IM_CONSTANT.online_message[uid].push(html);
+        if (IM_CONSTANT.online_message[id]) {
+            IM_CONSTANT.online_message[id].push(html);
         } else {
-            IM_CONSTANT.online_message[uid] = [html];
+            IM_CONSTANT.online_message[id] = [html];
         }
 
         // 显示提示
         if (gid) { // 群发
-            var container = im_findByUid('group', uid);
+            var container = im_findByUid('group', gid);
             im_displayTipsGroup(container);
         } else if (uid) {
-            var userDiv = im_findByUid('buddy', uid);
-            im_displayTips(userDiv);
+            container = im_findByUid('buddy', uid);
+            im_displayTips(container);
         }
     }
 
@@ -645,11 +645,21 @@ function im_transferFile(data) {
         html.push('  </dt>');
         html.push('  <dd class="msgBody defaultFontStyle">');
         html.push('    成员/群组 <em>' + username + '</em> 给您发来文件 <b>' + fileName + '</b><br />');
-        html.push('    <a href="#" onclick="">接收</a> 或者 <a href="#" onclick="">拒绝</a>?');
+        html.push('    <span><a href="' + IM_CONSTANT.servlet_path + 'im/filedownload?path=' + encodeURI(path) + '" onclick="im_afterDownload(this);">接收</a> 或者 <a href="#" onclick="im_afterDownload(this);">拒绝</a>?</span>');
         html.push('  </dd>');
         html.push('</dl>');
         return html.join('');
     }
+}
+
+/**
+ * 清除 下载后的 '接收' 和 '拒绝'
+ * @param a
+ */
+function im_afterDownload(a) {
+    var web = starfish.web;
+    var parent = web.dom.parent(a);
+    parent.innerHTML = "";
 }
 
 /**

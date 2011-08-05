@@ -352,10 +352,11 @@ function im_genChatWindow(container) {
             //var div = web.className('buddy_' + key, oldParent)[0];
 
             var status = o.getAttribute('old_state');
-            var div = web.className(status, oldParent)[0];
-
-            o = web.dom.dispose(o);
-            web.dom.insert(div, o);
+            if (status) {
+                var div = web.className(status, oldParent)[0];
+                o = web.dom.dispose(o);
+                web.dom.insert(div, o);
+            }
         }
     }
 
@@ -799,7 +800,6 @@ function im_addEventWindow(win, o) {
 
         web.dom.insert(progressbar, loading);
         web.dom.insert(chat_body_inputbox_rich_editor_div, progressbar);
-
     }
 
     /**
@@ -814,6 +814,8 @@ function im_addEventWindow(win, o) {
         html.push('  </dt>');
         html.push('</dl>');
         chat_body_msglist.innerHTML += html.join('');
+        var msglist_div = web.className('chat_body_msglist', win)[0];
+        msglist_div.scrollTop = msglist_div.scrollHeight;
     }
 
     // 上传文件拖拽
@@ -910,6 +912,11 @@ function im_addEventWindow(win, o) {
                     xhr.sendAsBinary(file.getAsBinary());
                 } else { // 只支持send
                     xhr.send(file);
+                }
+
+                if (callback === 'im_callBackFile') {
+                    // 显示一下文件已经发出
+                    _showFileTransfered();
                 }
 
                 // !!! 设置窗口的uploading属性为true, 在上传时不能发送消息; 关闭窗口时要检验该值是否为false !!!

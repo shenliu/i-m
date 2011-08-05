@@ -266,7 +266,6 @@ function im_genGroupChatWindow(container) {
             var message = $('hasMessage');
             var h = parseInt(web.css(message, 'height'));
             web.css(message, 'height', (h - 22) + 'px');
-
             if (content.innerHTML.trim() === "") { // 没有内容了则 隐藏tbox
                 starfish.toolkit.box.hide();
             }

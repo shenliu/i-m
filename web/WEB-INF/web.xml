@@ -94,4 +94,17 @@
         <url-pattern>/im/fileuploaddd</url-pattern>
     </servlet-mapping>
 
+    <!-- ====================================== -->
+
+    <servlet>
+        <description>文件下载</description>
+        <servlet-name>filedownload</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.FileDownloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>filedownload</servlet-name>
+        <url-pattern>/im/filedownload</url-pattern>
+    </servlet-mapping>
+
 </web-app>
