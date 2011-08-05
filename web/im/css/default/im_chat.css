@@ -177,6 +177,14 @@
     word-wrap: break-word;
 }
 
+.msgBody a {
+    color: #0033cc;
+}
+
+.msgBody a:hover {
+    border-bottom: 1px solid #0033cc;
+}
+
 .chat_body_msglist_buddymsg .defaultFontStyle,
     .chat_body_msglist_mymsg .defaultFontStyle {
     color: #000000;

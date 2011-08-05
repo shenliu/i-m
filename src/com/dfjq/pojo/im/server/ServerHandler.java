@@ -20,8 +20,8 @@ public class ServerHandler extends IoHandlerAdapter {
     /**
      * String: session.getRemoteAddress()
      * Map<String, IoSession>:
-     *      String: uid
-     *      IoSession: ioisession
+     * String: uid
+     * IoSession: ioisession
      */
     private ConcurrentMap<String, Map<String, IoSession>> sessions = new ConcurrentHashMap<String, Map<String, IoSession>>();
 
@@ -97,6 +97,8 @@ public class ServerHandler extends IoHandlerAdapter {
          *      req
          * 执行:
          *      exec
+         * 传输:
+         *      transfer
          */
         String command = result[0];
 
@@ -108,13 +110,16 @@ public class ServerHandler extends IoHandlerAdapter {
             msg(command, msg);
         } else if ("state".equals(command)) { // 状态改变
             state(msg);
+        } else if ("transfer".equals(command)) {
+            transfer(command, msg, session);
         }
 
     }
 
     /**
      * 改变 用户状态 通知每一个用户
-     * @param  msg  uid#*#state
+     *
+     * @param msg uid#*#state
      */
     private void state(String msg) {
         for (Map.Entry<String, Map<String, IoSession>> outEntry : sessions.entrySet()) {
@@ -127,16 +132,70 @@ public class ServerHandler extends IoHandlerAdapter {
     }
 
     /**
+     * 传输文件
+     *
+     * @param command 命令 'transfer'
+     * @param msg     形如:
+     *                <p/>
+     *                transfer###<from>1###张三疯###online<from><to>2###李四###online<to><msg>/im/upload/20110805/female.png<msg>
+     */
+    private void transfer(String command, String msg, IoSession session) {
+        String from = find("<from>", msg);
+        String to = find("<to>", msg);
+        String path = find("<msg>", msg);
+
+        String[] tos = to.split(",");
+        for (int i = 0; i < tos.length; i++) {
+            String _to = tos[i];
+            String[] infos = _to.split(HYPHEN);
+            String uid = infos[0];
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = sdf.format(new Date());
+
+            StringBuilder sb = new StringBuilder(command);
+            sb.append(HYPHEN);
+            sb.append("{from:'");
+            sb.append(from);
+            sb.append("',");
+
+            sb.append("to:'");
+            sb.append(to);
+            sb.append("',");
+
+            sb.append("date:'");
+            sb.append(date);
+            sb.append("',");
+
+            sb.append("msg:'");
+            sb.append(path);
+            sb.append("'}");
+
+            for (Map.Entry<String, Map<String, IoSession>> outEntry : sessions.entrySet()) {
+                Map<String, IoSession> map = outEntry.getValue();
+                if (map.containsKey(uid)) { // 用户在线
+                    IoSession sess = map.get(uid);
+                    if (sess != session) { // 不发给发送文件的'自己'
+                        sess.write(sb.toString());
+                    }
+                } else { // 用户不在线
+                    // todo
+                }
+            }
+        }
+    }
+
+    /**
      * 发送消息 给对话人
-     * @param command
-     * @param msg
+     *
+     * @param command {String}  命令
+     * @param msg     {String}  消息
      */
     private void msg(String command, String msg) {
         //对客户端做出的响应
         String from = find("<from>", msg);
         String to = find("<to>", msg);
         String words = find("<msg>", msg);
-        String files = find("<file>", msg);
+        String files = find("<file>", msg);    // 没用了~~ 2011.08.05
         String style = find("<style>", msg);
 
         String my_id = from.split(HYPHEN)[0];

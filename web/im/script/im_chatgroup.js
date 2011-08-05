@@ -320,59 +320,62 @@ function im_group_message(data) {
                     }
                     var container = im_findByUid('group', gid);
                     // 显示提示
-                    _displayTips(container);
+                    im_displayTipsGroup(container);
                 }
             }
         }
     }
 
-    /**
-     * 显示 有留言 提示
-     * @param parent
-     */
-    function _displayTips(parent) {
-        var tbox = web.className('tbox')[0];
-        var gid = parent.getAttribute('gid');
-        var gname = parent.getAttribute('gname');
-        if (!tbox) {  // 第一次接收消息
+}
+
+/**
+ * 显示 有留言 提示
+ * @param parent
+ */
+function im_displayTipsGroup(parent) {
+    var web = starfish.web;
+
+    var tbox = web.className('tbox')[0];
+    var gid = parent.getAttribute('gid');
+    var gname = parent.getAttribute('gname');
+    if (!tbox) {  // 第一次接收消息
+        im_showBox(_gen(), 'hasMessage');
+    } else {  // 已经接收过
+        var content = web.className('tcontent', tbox)[0];
+        if (content.innerHTML.trim() == "") {  // 没有提示正在显示
             im_showBox(_gen(), 'hasMessage');
-        } else {  // 已经接收过
-            var content = web.className('tcontent', tbox)[0];
-            if (content.innerHTML.trim() == "") {  // 没有提示正在显示
-                im_showBox(_gen(), 'hasMessage');
-            } else {  // 有消息正在显示
-                var spans = $$(content, 'span');
-                var sp = null;
-                for (var i = 0; i <spans.length; i++) {
-                    if (spans[i].getAttribute('lang') === gid) {
-                        sp = spans[i];
-                        break;
-                    }
-                }
-
-                if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
-                    var strong = $$(sp, 'strong')[0];
-                    var n = parseInt(strong.innerHTML);
-                    strong.innerHTML = ++n;
-                } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
-                    var s = _gen();
-                    web.dom.insert(content, web.dom.parseDOM(s)[0]);
-                    var message = $('hasMessage');
-                    var h = parseInt(web.css(message, 'height'));
-                    web.css(message, 'height', (h + 22) + 'px');
+        } else {  // 有消息正在显示
+            var spans = $$(content, 'span');
+            var sp = null;
+            for (var i = 0; i < spans.length; i++) {
+                if (spans[i].getAttribute('lang') === gid) {
+                    sp = spans[i];
+                    break;
                 }
             }
-        }
 
-        function _gen() {
-            var html = [];
-            html.push('<span lang="' + gid + '">群组 <b>');
-            html.push(gname);
-            html.push('</b> 给您发来消息(<strong>1</strong>)。<a href="#" onclick="im_showGroupMessage(\'' + gid + '\');">点击查看</a>');
-            return html.join('');
+            if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
+                var strong = $$(sp, 'strong')[0];
+                var n = parseInt(strong.innerHTML);
+                strong.innerHTML = ++n;
+            } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
+                var s = _gen();
+                web.dom.insert(content, web.dom.parseDOM(s)[0]);
+                var message = $('hasMessage');
+                var h = parseInt(web.css(message, 'height'));
+                web.css(message, 'height', (h + 22) + 'px');
+            }
         }
-
     }
+
+    function _gen() {
+        var html = [];
+        html.push('<span lang="' + gid + '">群组 <b>');
+        html.push(gname);
+        html.push('</b> 给您发来消息(<strong>1</strong>)。<a href="#" onclick="im_showGroupMessage(\'' + gid + '\');">点击查看</a>');
+        return html.join('');
+    }
+
 }
 
 function im_showGroupMessage(gid) {

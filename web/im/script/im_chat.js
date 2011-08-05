@@ -11,9 +11,13 @@ function im_callback(data) {
             im_group_message(result);
             break;
         case IM_CONSTANT.command.broadcast:
+            //
             break;
         case IM_CONSTANT.command.status.state:
             im_chgState(result);
+            break;
+        case IM_CONSTANT.command.transfer:
+            im_transferFile(result);
             break;
         default:
             break;
@@ -74,7 +78,7 @@ function im_message(data) {
                 }
 
                 // 显示提示
-                _displayTips(userDiv);
+                im_displayTips(userDiv);
             }
         }
     }
@@ -94,52 +98,54 @@ function im_message(data) {
         }, 150);
     }
 
-    /**
-     * 显示 有留言 提示
-     * @param parent
-     */
-    function _displayTips(parent) {
-        var tbox = web.className('tbox')[0];
-        var uid = parent.getAttribute('uid');
-        var username = parent.getAttribute('username');
-        if (!tbox) {  // 第一次接收消息
-            im_showBox(_gen(), 'hasMessage');
-        } else {  // 已经接收过
-            var content = web.className('tcontent', tbox)[0];
-            if (content.innerHTML.trim() == "") {  // 没有提示正在显示
-                im_showBox(_gen(), 'hasMessage');
-            } else {  // 有消息正在显示
-                var spans = $$(content, 'span');
-                var sp = null;
-                for (var i = 0; i <spans.length; i++) {
-                    if (spans[i].getAttribute('lang') === uid) {
-                        sp = spans[i];
-                        break;
-                    }
-                }
+}
 
-                if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
-                    var strong = $$(sp, 'strong')[0];
-                    var n = parseInt(strong.innerHTML);
-                    strong.innerHTML = ++n;
-                } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
-                    var s = _gen();
-                    web.dom.insert(content, web.dom.parseDOM(s)[0]);
-                    var message = $('hasMessage');
-                    var h = parseInt(web.css(message, 'height'));
-                    web.css(message, 'height', (h + 22) + 'px');
+/**
+ * 显示 有留言 提示
+ * @param parent
+ */
+function im_displayTips(parent) {
+    var web = starfish.web;
+
+    var tbox = web.className('tbox')[0];
+    var uid = parent.getAttribute('uid');
+    var username = parent.getAttribute('username');
+    if (!tbox) {  // 第一次接收消息
+        im_showBox(_gen(), 'hasMessage');
+    } else {  // 已经接收过
+        var content = web.className('tcontent', tbox)[0];
+        if (content.innerHTML.trim() == "") {  // 没有提示正在显示
+            im_showBox(_gen(), 'hasMessage');
+        } else {  // 有消息正在显示
+            var spans = $$(content, 'span');
+            var sp = null;
+            for (var i = 0; i < spans.length; i++) {
+                if (spans[i].getAttribute('lang') === uid) {
+                    sp = spans[i];
+                    break;
                 }
             }
-        }
 
-        function _gen() {
-            var html = [];
-            html.push('<span lang="' + uid + '">用户 <b>');
-            html.push(username);
-            html.push('</b> 给您发来消息(<strong>1</strong>)。<a href="#" onclick="im_showMessage(\'' + uid + '\');">点击查看</a></span>');
-            return html.join('');
+            if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
+                var strong = $$(sp, 'strong')[0];
+                var n = parseInt(strong.innerHTML);
+                strong.innerHTML = ++n;
+            } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
+                var s = _gen();
+                web.dom.insert(content, web.dom.parseDOM(s)[0]);
+                var message = $('hasMessage');
+                var h = parseInt(web.css(message, 'height'));
+                web.css(message, 'height', (h + 22) + 'px');
+            }
         }
+    }
 
+    function _gen() {
+        var html = [];
+        html.push('<span lang="' + uid + '">用户 <b>');
+        html.push(username);
+        html.push('</b> 给您发来消息(<strong>1</strong>)。<a href="#" onclick="im_showMessage(\'' + uid + '\');">点击查看</a></span>');
+        return html.join('');
     }
 
 }
@@ -448,13 +454,15 @@ function im_genWindowBody(win, o, type) {
     html.push('        <iframe src="./domain.html?d=' + String.uniqueID() + '" style="display:none;" name="uploadFileIframe"></iframe>');
     html.push('        <form class="chat_body_toolbar_send_pic_form" enctype="multipart/form-data" method="POST" action="" target="uploadFileIframe" title="发送图片...">');
     html.push('            <div class="chat_body_toolbar_send_pic_form_button" title="发送图片...">');
-    html.push('                <input type="hidden" name="callback" value="callBackPic" />');
+    html.push('                <input type="hidden" name="callback" value="im_callBackPic" />');
     html.push('                <input type="hidden" name="win" value="" />');
     html.push('                <input class="f" type="file" name="file" />');
     html.push('            </div>');
     html.push('        </form>');
-    html.push('        <form class="chat_body_toolbar_send_file_form" enctype="multipart/form-data" method="POST" action="" target="uploadFilIframe" title="发送文件...">');
+    html.push('        <form class="chat_body_toolbar_send_file_form" enctype="multipart/form-data" method="POST" action="" target="uploadFileIframe" title="发送文件...">');
     html.push('            <div class="chat_body_toolbar_send_file_form_button" title="发送文件...">');
+    html.push('                <input type="hidden" name="callback" value="im_callBackFile" />');
+    html.push('                <input type="hidden" name="win" value="" />');
     html.push('                <input class="f" type="file" name="file" value="" />');
     html.push('            </div>');
     html.push('        </form>');
@@ -716,6 +724,8 @@ function im_addEventWindow(win, o) {
         }
     });
 
+    var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+
     // <input type='file' />添加发送图片onchange方法
     var chat_body_toolbar_send_pic_form = web.className('chat_body_toolbar_send_pic_form', win)[0];
     var pic_file = web.className('f', chat_body_toolbar_send_pic_form)[0];
@@ -729,36 +739,83 @@ function im_addEventWindow(win, o) {
         var window = web.dom.prev(this);
         window.value = win.id;
 
-        // 开始上传图片
-        chat_body_toolbar_send_pic_form.action = IM_CONSTANT.servlet_path + "im/fileuploadform";
-
         var size;  //取得图片文件的大小(字节)
         if (starfish.client.browser.ie) {  // ie
             var fullpath = this.value;
             var imgObj = new Image();
-            imgObj.onload = function() {    // 必须写到这里
+            imgObj.onload = function() {
                 size = imgObj.fileSize;
-                _process();
+                _process(chat_body_toolbar_send_pic_form, 'image', size, IM_CONSTANT.image_maxSize_allowable);
             };
             imgObj.src = fullpath;
         } else {  // other browsers
             size = this.files[0].size;
-            _process();
-        }
-
-        function _process() {
-            if (_isSizeExceed('image', size)) {  // 大小超过规定
-                im_showWarningTips(win, "提示：上传的图片请小于 "
-                        + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
-                return;
-            }
-            chat_body_toolbar_send_pic_form.submit();  // 调用回调函数 -> callBackPic
-            win.setAttribute("uploading", true);
+            _process(chat_body_toolbar_send_pic_form, 'image', size, IM_CONSTANT.image_maxSize_allowable);
         }
 
     });
 
-    var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
+    // <input type='file' />添加发送文件onchange方法
+    var chat_body_toolbar_send_file_form = web.className('chat_body_toolbar_send_file_form', win)[0];
+    var file_file = web.className('f', chat_body_toolbar_send_file_form)[0];
+    web.event.addEvent(file_file, 'change', function() {
+        // 设置隐藏域<input type='hidden' name='win'>的value值为该窗口的id值
+        var window = web.dom.prev(this);
+        window.value = win.id;
+
+        var size;
+        if (starfish.client.browser.ie) {  // ie
+            size = 0; // ie还没找到好方法得到文件大小~~
+            _process(chat_body_toolbar_send_file_form, 'file', size, IM_CONSTANT.file_maxSize_allowable);
+        } else {  // other browsers
+            size = this.files[0].size;
+            _process(chat_body_toolbar_send_file_form, 'file', size, IM_CONSTANT.file_maxSize_allowable);
+        }
+        // 显示一下文件已经发出
+        _showFileTransfered();
+    });
+
+    /**
+     * form 上传处理函数
+     * @param form
+     * @param type  'image' or 'file'
+     * @param size   文件大小
+     * @param maxSize  文件允许的最大尺寸
+     */
+    function _process(form, type, size, maxSize) {
+        if (_isSizeExceed(type, size)) {  // 大小超过规定
+            im_showWarningTips(win, "提示：上传的文件请小于 " + (maxSize / 1024) + " Mb。");
+            return;
+        }
+        // 开始上传
+        form.action = IM_CONSTANT.servlet_path + "im/fileuploadform";
+        form.submit();  // 调用回调函数 -> callBackPic callBackFile
+        win.setAttribute("uploading", true);
+
+        var progressbar = web.dom.elem('div');
+        progressbar.className = "progressbar a_center";
+        var loading = web.dom.elem('img');
+        loading.src = "images/loading.gif";
+
+        web.dom.insert(progressbar, loading);
+        web.dom.insert(chat_body_inputbox_rich_editor_div, progressbar);
+
+    }
+
+    /**
+     * 显示上传的文件已经传输完成
+     */
+    function _showFileTransfered() {
+        var chat_body_msglist = web.className('chat_body_msglist', win)[0];
+        var html = [];
+        html.push('<dl class="chat_body_msglist_mymsg">');
+        html.push('  <dt class="msgHead" style="color:#990099;">');
+        html.push('    文件已经发出');
+        html.push('  </dt>');
+        html.push('</dl>');
+        chat_body_msglist.innerHTML += html.join('');
+    }
+
     // 上传文件拖拽
     if ('FileReader' in window) {
         web.event.addEvent(chat_body_inputbox_rich_editor_div, 'dragover', function(e) {
@@ -778,14 +835,14 @@ function im_addEventWindow(win, o) {
                                 + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
                         return;
                     }
-                    callback = "callBackPic";
+                    callback = "im_callBackPic";
                 } else {   // 文件
                     if (_isSizeExceed('file', f.size)) {  // 大小超过规定
                         im_showWarningTips(win, "提示：上传的文件请小于 "
                                 + (IM_CONSTANT.file_maxSize_allowable / 1024) + " Mb。");
                         return;
                     }
-                    callback = "callBackFile";
+                    callback = "im_callBackFile";
                 }
 
                 var outer = web.dom.elem('div');
@@ -944,16 +1001,68 @@ function im_showWarningTips(win, str) {
  * @param  {String} id  窗口id
  * @param  {String}  path  图片路径
  */
-function callBackPic(id, path) {
+function im_callBackPic(id, path) {
     var web = starfish.web;
     var win = $(id);
     var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
     chat_body_inputbox_rich_editor_div.innerHTML += '<img src="' + path + '" />';
+
+    // 移除progressbar进度条
+    var progressbar = web.className('progressbar', win)[0];
+    web.dom.dispose(progressbar);
+
+    // 窗口 uploading 属性置为false, 则可以发送消息了
     win.setAttribute('uploading', false);
 }
 
-function callBackFile(id, path) {
+/**
+ * 上传文件回调函数
+ * @param  {String} id  窗口id
+ * @param  {String}  path  文件在服务器上的路径
+ */
+function im_callBackFile(id, path) {
     var web = starfish.web;
     var win = $(id);
 
+    var command = IM_CONSTANT.command.transfer;
+    if (id.match(/^window_group/)) {  // 群组
+        var offset = id.lastIndexOf('_') + 1;
+        var gid = id.slice(offset);
+        var chat_username = web.className('chat_username', win)[0];
+        var de = gid + IM_CONSTANT.hyphen + chat_username.getAttribute('title');
+    } else {  //  单聊
+        de = IM_CONSTANT.myself_id + IM_CONSTANT.hyphen + IM_CONSTANT.myself_name;
+    }
+
+    var from = "<from>" + de + "<from>";
+    var chat_body_sidebar = web.className('chat_body_sidebar', win)[0];
+    if (!chat_body_sidebar) {  // 单聊
+        offset = id.lastIndexOf('_') + 1; // 单聊的对方id 可以在该窗口的id中找到
+        var uid = id.slice(offset);
+        chat_username = web.className('chat_username', win)[0];
+        var username = chat_username.getAttribute('title');
+        var status = ""; // todo status待完善
+        var to = "<to>" + uid + IM_CONSTANT.hyphen + username + IM_CONSTANT.hyphen + status + "<to>";
+    } else {  // 群聊
+        var members = web.className('buddy_user_container', chat_body_sidebar);
+        var toz = [];
+        for (var p = 0, q = members.length; p < q; p++) {
+            uid = members[p].getAttribute('uid');
+            username = members[p].getAttribute('username');
+            status = members[p].getAttribute('status');
+            status = status == null ? -1 : status;
+            toz.push(uid + IM_CONSTANT.hyphen + username + IM_CONSTANT.hyphen + status);
+        }
+        to = "<to>" + toz.join(',') + "<to>";
+    }
+    var msg = "<msg>" + path + "<msg>";
+    var message = command + IM_CONSTANT.hyphen + from + to + msg;
+    IM_CONSTANT.socket.write(message);
+
+    // 移除progressbar进度条
+    var progressbar = web.className('progressbar', win)[0];
+    web.dom.dispose(progressbar);
+
+    // 窗口 uploading 属性置为false, 则可以发送消息了
+    win.setAttribute('uploading', false);
 }

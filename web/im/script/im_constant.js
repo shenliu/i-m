@@ -68,5 +68,6 @@ IM_CONSTANT.command = {
     msg: 'msg',
     group: 'group',
     broadcast: 'broadcast',
+    transfer: 'transfer',
     status: IM_CONSTANT.user_status
 };

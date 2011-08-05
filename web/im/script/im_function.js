@@ -584,7 +584,71 @@ function im_chgState(data) {
         }
 
         // 判断是否有对应的用户的窗口打开着
-        // 单聊窗口
+        // 单聊窗口  todo
+    }
+}
+
+/**
+ * 对方发来文件 请求接收   后台回调方法  (这是在 接收方 运行的函数)
+ * @param data
+ */
+function im_transferFile(data) {
+    var web = starfish.web;
+    //console.log(data);
+    var obj = eval("(" + data + ")");
+
+    var id = obj['from'].split(IM_CONSTANT.hyphen)[0]; // 有可能是gid
+    var uid = null, gid = null;
+    if (id.length === 32) { // 群发
+        gid = id;
+        var win = $("window_group_" + gid);
+    } else {  // 单聊
+        uid = id;
+        win = $("window_" + IM_CONSTANT.myself_id + "_" + uid);  // 发出消息的人的窗口id
+    }
+
+    var html = _list(obj);
+    if (win) { // 窗口打开着
+        var msglist_div = web.className('chat_body_msglist', win)[0];
+        var dom = web.dom.parseDOM(html)[0];
+        web.dom.insert(msglist_div, dom);
+        msglist_div.scrollTop = msglist_div.scrollHeight;
+    } else { // 窗口没有打开
+        // 判断是否有多条消息
+        if (IM_CONSTANT.online_message[uid]) {
+            IM_CONSTANT.online_message[uid].push(html);
+        } else {
+            IM_CONSTANT.online_message[uid] = [html];
+        }
+
+        // 显示提示
+        if (gid) { // 群发
+            var container = im_findByUid('group', uid);
+            im_displayTipsGroup(container);
+        } else if (uid) {
+            var userDiv = im_findByUid('buddy', uid);
+            im_displayTips(userDiv);
+        }
+    }
+
+    function _list(o) {
+        var username = obj['from'].split(IM_CONSTANT.hyphen)[1];
+        var path = obj['msg'];
+        var offset = path.lastIndexOf('/') + 1;
+        var fileName = path.slice(offset);
+
+        var html = [];
+        html.push('<dl class="chat_body_msglist_buddymsg">');
+        html.push('  <dt class="msgHead">');
+        html.push(username);
+        html.push('    <span>' + o['date'] + '</span>');
+        html.push('  </dt>');
+        html.push('  <dd class="msgBody defaultFontStyle">');
+        html.push('    成员/群组 <em>' + username + '</em> 给您发来文件 <b>' + fileName + '</b><br />');
+        html.push('    <a href="#" onclick="">接收</a> 或者 <a href="#" onclick="">拒绝</a>?');
+        html.push('  </dd>');
+        html.push('</dl>');
+        return html.join('');
     }
 }
 
