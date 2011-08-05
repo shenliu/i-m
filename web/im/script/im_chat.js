@@ -764,6 +764,12 @@ function im_addEventWindow(win, o) {
         var window = web.dom.prev(this);
         window.value = win.id;
 
+        var fileName = this.value;
+        var offset = fileName.lastIndexOf("\\");
+        if (offset != -1) {
+            fileName = fileName.slice(offset + 1);
+        }
+
         var size;
         if (starfish.client.browser.ie) {  // ie
             size = 0; // ie还没找到好方法得到文件大小~~
@@ -773,7 +779,7 @@ function im_addEventWindow(win, o) {
             _process(chat_body_toolbar_send_file_form, 'file', size, IM_CONSTANT.file_maxSize_allowable);
         }
         // 显示一下文件已经发出
-        _showFileTransfered();
+        _showFileTransfered(fileName);
     });
 
     /**
@@ -805,12 +811,12 @@ function im_addEventWindow(win, o) {
     /**
      * 显示上传的文件已经传输完成
      */
-    function _showFileTransfered() {
+    function _showFileTransfered(fileName) {
         var chat_body_msglist = web.className('chat_body_msglist', win)[0];
         var html = [];
         html.push('<dl class="chat_body_msglist_mymsg">');
         html.push('  <dt class="msgHead" style="color:#990099;">');
-        html.push('    文件已经发出');
+        html.push('    文件 <b>' + fileName + '</b> 已经发出');
         html.push('  </dt>');
         html.push('</dl>');
         chat_body_msglist.innerHTML += html.join('');
@@ -916,7 +922,7 @@ function im_addEventWindow(win, o) {
 
                 if (callback === 'im_callBackFile') {
                     // 显示一下文件已经发出
-                    _showFileTransfered();
+                    _showFileTransfered(file.name);
                 }
 
                 // !!! 设置窗口的uploading属性为true, 在上传时不能发送消息; 关闭窗口时要检验该值是否为false !!!
