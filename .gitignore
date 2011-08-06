@@ -6,3 +6,4 @@ web/WEB-INF/applicationContext.xml
 web/WEB-INF/classes/
 web/im/script/im_constant_url.js
 web/im/images/face/
+web/im/domain.html

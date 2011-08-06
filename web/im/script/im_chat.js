@@ -816,7 +816,7 @@ function im_addEventWindow(win, o) {
         var html = [];
         html.push('<dl class="chat_body_msglist_mymsg">');
         html.push('  <dt class="msgHead" style="color:#990099;">');
-        html.push('    文件 <b>' + fileName + '</b> 已经发出');
+        html.push('    文件 <b>' + fileName + '</b> 已经发送');
         html.push('  </dt>');
         html.push('</dl>');
         chat_body_msglist.innerHTML += html.join('');
@@ -837,6 +837,11 @@ function im_addEventWindow(win, o) {
             var callback, w;
             var files = e.dataTransfer.files;
             for (var i = 0, f; f = files[i]; i++) {
+                alert(f.size + "-" + f.type);
+                if (f.size === 0 || f.size === 4096) {  // 上传的是 文件夹 或大小为0的文件 chrome的文件夹size为4096
+                    im_showWarningTips(win, "提示：请上传文件。如要上传文件夹请先压缩为文件。");
+                    continue;
+                }
                 if (_isImage(f.name)) {  // 图片
                     if (_isSizeExceed('image', f.size)) {  // 大小超过规定
                         im_showWarningTips(win, "提示：上传的图片请小于 "
