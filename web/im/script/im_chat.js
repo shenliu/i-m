@@ -837,7 +837,6 @@ function im_addEventWindow(win, o) {
             var callback, w;
             var files = e.dataTransfer.files;
             for (var i = 0, f; f = files[i]; i++) {
-                alert(f.size + "-" + f.type);
                 if (f.size === 0 || f.size === 4096) {  // 上传的是 文件夹 或大小为0的文件 chrome的文件夹size为4096
                     im_showWarningTips(win, "提示：请上传文件。如要上传文件夹请先压缩为文件。");
                     continue;
