@@ -88,15 +88,15 @@ var im_resize = function(windows) {
             var dx = web.window.mouseX(e) - ex;
             var dy = web.window.mouseY(e) - ey;
 
-            if (which.indexOf("w") != -1) {
+            if (which.indexOf("w") !== -1) {
                 left += dx;
-            } else if (which.indexOf("e") != -1) {
+            } else if (which.indexOf("e") !== -1) {
                 right += dx;
             }
 
-            if (which.indexOf("n") != -1) {
+            if (which.indexOf("n") !== -1) {
                 top += dy;
-            } else if (which.indexOf("s") != -1) {
+            } else if (which.indexOf("s") !== -1) {
                 bottom += dy;
             }
 
@@ -123,7 +123,7 @@ var im_resize = function(windows) {
                 web.css(outer, 'height', (web.window.fullHeight(content) - 30) + 'px');
             }
 
-            if (windows.id && windows.id == "im_window") {
+            if (windows.id && windows.id === "im_window") {
                 im_fix_mainTabContainer_height(windows);
             } else {
                 im_fix_chat_size(outer);

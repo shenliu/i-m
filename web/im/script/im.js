@@ -104,7 +104,7 @@ starfish.web.event.addEvent(window, 'load', function(){
     // 为 im_button 添加点击事件
     web.event.addEvent($('im_button'), 'click', function() {
         var window = $('im_window');
-        if (web.css(window, 'display') == 'none') {
+        if (web.css(window, 'display') === 'none') {
             web.show(window);
         } else {
             web.hide(window);
@@ -134,7 +134,7 @@ starfish.web.event.addEvent(window, 'load', function(){
                 //var divs = $$(main_tab_container, 'div');
                 for (var k = 0; k < main_tab_container.childNodes.length; k++) {
                     var node = main_tab_container.childNodes[k];
-                    if (node.nodeType != 1) {
+                    if (node.nodeType !== 1) {
                         continue;
                     }
                     web.hide(node);

@@ -174,7 +174,7 @@ function im_window(options) {
     web.dom.insert(im_window_content_titleBar, window_title);
 
     // 最大化/最小化
-    if (options.id != "im_window") {
+    if (options.id !== "im_window") {
         web.show(window_max); // 显示最大化按钮
         web.event.addEvent(window_max, 'click', function() {
             _max_restore(im_window);
@@ -257,7 +257,7 @@ function im_window(options) {
 
     // 该窗口在最上层显示
     web.event.addEvent(im_window, 'click', function() {
-        if (this != IM_CONSTANT.last_chatwindow) {
+        if (this !== IM_CONSTANT.last_chatwindow) {
             web.css(this, 'zIndex', 30);
             if (IM_CONSTANT.last_chatwindow) {
                 web.css(IM_CONSTANT.last_chatwindow, 'zIndex', 25);

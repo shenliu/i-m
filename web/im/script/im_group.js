@@ -90,7 +90,7 @@ function im_createGroup(gid, gname, gdesc) {
     var ok = web.className('im_dialog_form_ok', content)[0];
     web.event.addEvent(ok, 'click', function() {
         var input = web.className('im_dialog_form_input', content)[0];
-        if (input.value.trim() == "") {
+        if (input.value.trim() === "") {
             var warning = web.className('im_dialog_form_warning', content)[0];
             warning.innerHTML = "请输入群组名称";
             web.show(warning);
@@ -107,7 +107,7 @@ function im_createGroup(gid, gname, gdesc) {
             url += "?" + param;
         }
         web.ajax.get(encodeURI(url), function(result) {
-            if (result.trim() == 'true') {
+            if (result.trim() === 'true') {
                 // 移除 im_dialog div
                 var im_dialog = web.className('im_dialog')[0];
                 web.dom.dispose(im_dialog);
@@ -151,7 +151,7 @@ function im_displayGroup() {
         // 清除原有列表
         group_list_inner.innerHTML = "";
 
-        var o = JSON.parse("(" + result.trim() + ")");
+        var o = eval("(" + result.trim() + ")");
         _order(o);
         var html = [];
         for (var i = 0; i < o.length; i++) {
@@ -162,8 +162,8 @@ function im_displayGroup() {
             var container = im_findByUid('buddy', uid);
             var gender = container.getAttribute('gender');
             var username = container.getAttribute('username');
-            var img = IM_CONSTANT.myself_id == uid ?
-                    (gender == 1 ? 'images/group_creator_male.png' : 'images/group_creator_female.png') :
+            var img = IM_CONSTANT.myself_id === uid ?
+                    (gender === 1 ? 'images/group_creator_male.png' : 'images/group_creator_female.png') :
                     'images/group_list_normal.png';
 
             html.push('<div class="im_group_list group_user_container" gid="' + gid + '" uid="' + uid +
@@ -209,7 +209,7 @@ function im_displayGroup() {
                 });
 
                 // 右键菜单 内容及其调用函数
-                if (group.getAttribute('uid') == IM_CONSTANT.myself_id) {
+                if (group.getAttribute('uid') === IM_CONSTANT.myself_id) {
                     menus = { // 本人是该群组创建者
                         '编辑组员': im_memberGroup,
                         '编辑群组': im_modifyGroup,
@@ -257,7 +257,7 @@ function im_deleteGroup(gid, gname) {
     web.event.addEvent(im_confirm_ok, 'click', function() {
         var url = IM_CONSTANT.servlet_path + "im/deletegroup?gid=" + gid;
         web.ajax.get(encodeURI(url), function(result) {
-            if (result.trim() == 'true') {
+            if (result.trim() === 'true') {
                 _cancel();
 
                 // 如果有打开着的本群组窗口 则关闭之
@@ -371,7 +371,7 @@ function im_memberGroup(gid, gname) {
                 var _pid = pid.substring(0, offset);
                 if (last_pid !== _pid) {
                     last_pid = _pid;
-                    if (ul != null) {
+                    if (ul !== null) {
                         web.dom.insert(im_member_list, ul);
                     }
                     ul = web.dom.elem('ul');
@@ -386,7 +386,7 @@ function im_memberGroup(gid, gname) {
                 web.dom.insert(li, span);
                 web.dom.insert(ul, li);
                 // 最后一项 加入ul
-                if (i == users.length - 1) {
+                if (i === users.length - 1) {
                     web.dom.insert(im_member_list, ul);
                 }
 
@@ -405,7 +405,7 @@ function im_memberGroup(gid, gname) {
                     var uid = li.getAttribute('uid');
                     if (web.hasClass(li, 'im_member_list_member_selected')) {
                         if (uid === IM_CONSTANT.myself_id) { // 不能移除群组创建人
-                            im_showBox('不能移除群组创建人', 'hasWarning', 5);
+                            im_showBox('不能移除群组创建人', 'hasWaining', 5);
                         } else {
                             web.removeClass(li, 'im_member_list_member_selected');
                             selectedMembers.erase(uid);
@@ -426,7 +426,7 @@ function im_memberGroup(gid, gname) {
     // ajax查询这个群组已经包含的成员
     var url = IM_CONSTANT.servlet_path + "/im/getgroupbygid?gid=" + gid;
     web.ajax.get(encodeURI(url), function(result) {
-        var o = JSON.parse("(" + result.trim() + ")");
+        var o = eval("(" + result.trim() + ")");
         var members = o['member'];
         var im_member_list = web.className('im_member_list')[0];
         var lis = $$(im_member_list, 'li');
@@ -450,7 +450,7 @@ function im_memberGroup(gid, gname) {
         var members = "," + selectedMembers.join(',') + ",";
         var url = IM_CONSTANT.servlet_path + "im/modifygroup";
         web.ajax.post(encodeURI(url), {gid: gid, member: members}, function(result) {
-            if (result.trim() == 'true') {
+            if (result.trim() === 'true') {
                 _cancel();
                 // 显示 成功
                 im_showBox('群组成员已经修改', 'hasMessage', 5);

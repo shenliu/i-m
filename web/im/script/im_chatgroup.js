@@ -74,7 +74,7 @@ function im_genGroupChatWindow(container) {
         var right = web.css(chat_body_sidebar_2, 'right'); // 分隔条原始right值
         web.event.addEvent(chat_body_sidebar_2, 'click', function() {
             var width = web.window.fullWidth(chat_body_sidebar);
-            if (width != 0) { // 展开状态
+            if (width !== 0) { // 展开状态
                 chat_body_sidebar.setAttribute('oldwidth', width);
                 web.css(chat_body_sidebar, 'width', '0px');
                 web.css(chat_body_sidebar_2, 'right', '-1px');
@@ -101,21 +101,21 @@ function im_genGroupChatWindow(container) {
         // 按 ctrl+enter 键盘事件
         var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
         web.event.addEvent(chat_body_inputbox_rich_editor_div, 'keydown', function(e) {
-            if (e.ctrlKey && e.keyCode == 13) {
+            if (e.ctrlKey && e.keyCode === 13) {
                 _event(e);
             }
         });
 
         function _event(e) {
             // 正在上传文件 不能发送消息
-            if (win.getAttribute('uploading') != null && win.getAttribute('uploading') === true) {
+            if (win.getAttribute('uploading') !== null && win.getAttribute('uploading') === true) {
                 im_showBox('有文件正在上传，请等待上传结束后再发送消息。', 'hasAttention', 5);
                 return;
             }
 
             var text = web.className('chat_body_inputbox_rich_editor_div', win)[0];
             var val = text.innerHTML.trim();
-            if (val.replace(/(&nbsp;)*/g, '') == "") {  // 空信息
+            if (val.replace(/(&nbsp;)*/g, '') === "") {  // 空信息
                 im_showWarningTips(win, "提示：消息内容不能为空，请输入内容。");
             } else {
                 // 对象o为 'div.im_group_list'
@@ -169,7 +169,7 @@ function im_genGroupChatWindow(container) {
 
         var url = IM_CONSTANT.servlet_path + "im/getgroupbygid?gid=" + gid;
         web.ajax.get(encodeURI(url), function(result) {
-            var o = JSON.parse("(" + result.trim() + ")");
+            var o = eval("(" + result.trim() + ")");
             var s_member = o['member'];
             s_member = s_member.substring(1, s_member.length - 1);
             var members = s_member.split(",");
@@ -207,7 +207,7 @@ function im_genGroupChatWindow(container) {
                     web.event.addEvent(node, 'dblclick', function() {
                         var self = this;
                         var uid = self.getAttribute('uid');
-                        if (uid == IM_CONSTANT.myself_id) { // 是自己不显示窗口
+                        if (uid === IM_CONSTANT.myself_id) { // 是自己不显示窗口
                             return;
                         }
                         var select_win = $('window_' + IM_CONSTANT.myself_id + "_" + uid);
@@ -285,14 +285,14 @@ function im_group_message(data) {
     //console.log(data);
     var web = starfish.web;
 
-    var obj = JSON.parse("(" + data + ")");
+    var obj = eval("(" + data + ")");
     /*
      * 窗口 判断各方是否打开了此窗口 id为 window_group_gid
      */
     var win = null;
     var gid = obj.from.split(IM_CONSTANT.hyphen)[2];
     var to = obj.to;
-    if (to == "*") {
+    if (to === "*") {
         // 广播 todo
     } else {
         var toes = to.split(",");
@@ -341,7 +341,7 @@ function im_displayTipsGroup(parent) {
         im_showBox(_gen(), 'hasMessage');
     } else {  // 已经接收过
         var content = web.className('tcontent', tbox)[0];
-        if (content.innerHTML.trim() == "") {  // 没有提示正在显示
+        if (content.innerHTML.trim() === "") {  // 没有提示正在显示
             im_showBox(_gen(), 'hasMessage');
         } else {  // 有消息正在显示
             var spans = $$(content, 'span');

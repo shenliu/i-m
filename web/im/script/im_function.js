@@ -26,7 +26,7 @@ function im_findByUid(type, id) {
     var containers = starfish.web.className(type + "_user_container", list, "div");
     for (var ii = 0, jj = containers.length; ii < jj; ii++) {
         var container = containers[ii];
-        if (container.getAttribute(s_id) == id) {
+        if (container.getAttribute(s_id) === id) {
             return container;
         }
     }
@@ -44,7 +44,7 @@ function im_allByUid(uid) {
     var containers = starfish.web.className("buddy_user_container", list, "div");
     for (var ii = 0, jj = containers.length; ii < jj; ii++) {
         var container = containers[ii];
-        if (container.getAttribute('uid') == uid) {
+        if (container.getAttribute('uid') === uid) {
             result.push(container);
         }
     }
@@ -176,7 +176,7 @@ function im_rightMenu(src, menus, options) {
                 var li = web.dom.elem('li');
                 web.css(li, 'width', options.width + 'px');
 
-                if (type(item) == 'object') {
+                if (type(item) === 'object') {
                     var _container = web.dom.elem('ul');
                     _parse(_container, item);
                     web.dom.addText(key + " -> ", li);
@@ -289,14 +289,14 @@ function im_makeChatList(o) {
     var style = o['stylz'].toString();
     stylez.push("font-family:" + style.getParamter("family"));
     stylez.push("font-size:" + style.getParamter("size") + "pt");
-    stylez.push("font-weight:" + (style.getParamter("weight") == "true" ? "bold" : "normal"));
-    stylez.push("font-style:" + (style.getParamter("italic") == "true" ? "italic" : "normal"));
-    stylez.push("text-decoration:" + (style.getParamter("underline") == "true" ? "underline" : "none"));
+    stylez.push("font-weight:" + (style.getParamter("weight") === "true" ? "bold" : "normal"));
+    stylez.push("font-style:" + (style.getParamter("italic") === "true" ? "italic" : "normal"));
+    stylez.push("text-decoration:" + (style.getParamter("underline") === "true" ? "underline" : "none"));
     stylez.push("color:" + style.getParamter("color"));
 
     var from_id = o.from.split(IM_CONSTANT.hyphen)[0];
     var from_name = o.from.split(IM_CONSTANT.hyphen)[1];
-    if (from_id == IM_CONSTANT.myself_id) {
+    if (from_id === IM_CONSTANT.myself_id) {
         html.push('<dl class="chat_body_msglist_mymsg">');
     } else {
         html.push('<dl class="chat_body_msglist_buddymsg">');
@@ -573,11 +573,11 @@ function im_chgState(data) {
         var span = web.className('onlineNumber', parent2)[0];
         if (span) {
             var num = parseInt(span.innerHTML);
-            if ((oldclass != 'hidden' && oldclass != 'offline')  // 原来不是hidden/offline 现在是了
+            if ((oldclass !== 'hidden' && oldclass !== 'offline')  // 原来不是hidden/offline 现在是了
                     && (state === 'hidden' || state === 'offline')) {
                 num -= 1;
             } else if ((oldclass === 'hidden' || oldclass === 'offline')  // 原来是hidden/offline 现在不是了
-                    && (state != 'hidden' && state != 'offline')) {
+                    && (state !== 'hidden' && state !== 'offline')) {
                 num += 1;
             }
             span.innerHTML = num;
@@ -595,7 +595,7 @@ function im_chgState(data) {
 function im_transferFile(data) {
     var web = starfish.web;
     //console.log(data);
-    var obj = JSON.parse("(" + data + ")");
+    var obj = eval("(" + data + ")");
 
     var id = obj['from'].split(IM_CONSTANT.hyphen)[0]; // 有可能是gid
     var uid = null, gid = null;

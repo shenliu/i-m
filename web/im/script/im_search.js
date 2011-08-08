@@ -49,7 +49,7 @@ function im_search_init() {
     // 搜索栏 键盘事件
     web.event.addEvent(search_input, "keyup", function(e) {
         // 非 回车 向上 向下
-        if (e.keyCode != 13 && e.keyCode != 38 && e.keyCode != 40) {
+        if (e.keyCode !== 13 && e.keyCode !== 38 && e.keyCode !== 40) {
             var v = this.value.toString().trim();
             search_result.innerHTML = "";
             if (v.length > 0) {
@@ -98,15 +98,15 @@ function im_search_init() {
         var lis = $$(search_result, "li");
 
         if (lis.length > 0 && web.css(search_result, "display") === "block") {  // search_result显示时
-            if (e.keyCode == 13) {    // 回车
+            if (e.keyCode === 13) {    // 回车
                 if (curli) {
                     im_showMessage(curli.getAttribute('uid'));
                     web.hide(search_result);
                 }
                 return false;
-            } else if (e.keyCode == 38) {    // 上箭头
+            } else if (e.keyCode === 38) {    // 上箭头
                 return _curli((curli && curli.previousSibling) || lis[lis.length - 1]);
-            } else if (e.keyCode == 40) {    // 下箭头
+            } else if (e.keyCode === 40) {    // 下箭头
                 return _curli((curli && curli.nextSibling) || lis[0]);
             }
         }
@@ -131,7 +131,7 @@ function im_search_init() {
         for (var ii = 0, jj = containers.length; ii < jj; ii++) {
             var container = containers[ii];
             var _name = container.getAttribute('username');
-            if (_name.indexOf(name) != -1) {
+            if (_name.indexOf(name) !== -1) {
                 var uid = container.getAttribute('uid');
                 result.push({
                     uid: uid,

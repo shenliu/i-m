@@ -14,10 +14,10 @@ function im_userlist() {
         for (var i = 0, j = children.length; i < j; i++) {
             var child = children[i];
 
-            if (child.nodeType == 3) {
+            if (child.nodeType === 3) {
                 continue;
             }
-            if (child.tagName != IM_CONSTANT.xml_end_node) {
+            if (child.tagName !== IM_CONSTANT.xml_end_node) {
                 var buddy_list_collapsed = _genDiv(child);
 
                 // 点击事件
@@ -37,7 +37,7 @@ function im_userlist() {
                 web.dom.insert(container, buddy_list_collapsed);
                 web.dom.insert(container, buddy_list_body);
             } else {
-                if (container.innerHTML == "") {  // 只添加一次
+                if (container.innerHTML === "") {  // 只添加一次
                     var buddy_callme = web.dom.elem('div');
                     buddy_callme.className = 'buddy_callme';
 
@@ -97,13 +97,13 @@ function im_userlist() {
                 buddy_user_avatar.className = 'buddy_user_avatar';
 
                 // 在列表中只显示 male/female的头像
-                if (picture == null) {
+                if (picture === null) {
                     picture = "images/nopic.png";
                 } else {
                     picture = picture.data;
                     // todo
                 }
-                buddy_user_avatar.src = gender == "1" ? "images/male.png" : "images/female.png";;
+                buddy_user_avatar.src = gender === "1" ? "images/male.png" : "images/female.png";;
 
                 var buddy_user_state = web.dom.elem('div');
                 buddy_user_state.className = 'buddy_user_state';
@@ -187,7 +187,7 @@ function im_userlist() {
                 web.event.addEvent(buddy_user_container, 'dblclick', function() {
                     var that = this;
                     var uid = that.getAttribute('uid');
-                    if (uid == IM_CONSTANT.myself_id) { // 是自己不显示窗口
+                    if (uid === IM_CONSTANT.myself_id) { // 是自己不显示窗口
                         return;
                     }
                     var win = $('window_' + IM_CONSTANT.myself_id + "_" + uid);
@@ -230,7 +230,7 @@ function im_userlist() {
 
         web.dom.insert(buddy_list_head_container, buddy_list_name);
 
-        if (obj.getAttribute('total') != null) {
+        if (obj.getAttribute('total') !== null) {
             var span = web.dom.elem('span');
             span.innerHTML = "[<span class='onlineNumber'>0</span>/" + obj.getAttribute('total') + "]";
             web.dom.insert(buddy_list_head_container, span);
@@ -247,7 +247,7 @@ function im_userlist() {
      */
     function _showhide(o) {
         var buddy_list_body = web.dom.next(o);
-        if (o.className == 'buddy_list_collapsed') {
+        if (o.className === 'buddy_list_collapsed') {
             web.show(buddy_list_body);
             web.css(buddy_list_body, 'height', 'auto');
             o.className = 'buddy_list_expanded';

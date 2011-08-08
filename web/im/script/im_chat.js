@@ -33,14 +33,14 @@ function im_message(data) {
     //alert("im_message -> " + data);
     var web = starfish.web;
 
-    var obj = JSON.parse("(" + data + ")");
+    var obj = eval("(" + data + ")");
     /*
      * 窗口 判断各方是否打开了此窗口 id为 window_from_to
      */
     var win = null;
     var from = obj.from.split(IM_CONSTANT.hyphen)[0];
     var to = obj.to;
-    if (to == "*") {
+    if (to === "*") {
         // 广播 todo
     } else {
         var toes = to.split(",");
@@ -257,7 +257,7 @@ function im_genChatWindow(container) {
         // 按 ctrl+enter 键盘事件
         var chat_body_inputbox_rich_editor_div = web.className('chat_body_inputbox_rich_editor_div', win)[0];
         web.event.addEvent(chat_body_inputbox_rich_editor_div, 'keydown', function(e) {
-            if (e.ctrlKey && e.keyCode == 13) {
+            if (e.ctrlKey && e.keyCode === 13) {
                 _event(e);
             }
         });
@@ -410,7 +410,7 @@ function im_genWindowBody(win, o, type) {
     for (var i = 0; i < IM_CONSTANT.fonts.length; i++) {
         var f = IM_CONSTANT.fonts[i];
         html.push('<option value="' + f + '" ' +
-                (f == IM_CONSTANT.user_stylez.family ? 'selected="selected"' : '') + '>' +
+                (f === IM_CONSTANT.user_stylez.family ? 'selected="selected"' : '') + '>' +
                 f + '</option>');
     }
     html.push('                </select>');
@@ -419,7 +419,7 @@ function im_genWindowBody(win, o, type) {
     html.push('                <select class="fontSize">');
     for (var s = 8; s <= 22; s++) {
         html.push('<option value="' + s + '" ' +
-                (s == IM_CONSTANT.user_stylez.size ? 'selected="selected"' : '') + '>' +
+                (s === IM_CONSTANT.user_stylez.size ? 'selected="selected"' : '') + '>' +
                 s + '</option>');
     }
     html.push('                </select>');
@@ -769,7 +769,7 @@ function im_addEventWindow(win, o) {
 
         var fileName = this.value;
         var offset = fileName.lastIndexOf("\\");
-        if (offset != -1) {
+        if (offset !== -1) {
             fileName = fileName.slice(offset + 1);
         }
 
@@ -937,10 +937,10 @@ function im_addEventWindow(win, o) {
             }
 
             function _XHR_state_change_handler(xhr, evt) {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
                         var result = xhr.responseText;
-                        var o = JSON.parse('(' + result + ')');
+                        var o = eval('(' + result + ')');
                         var fn = o['fn'];
                         var param = o['param'];
                         fn.apply(null, param);
@@ -967,9 +967,9 @@ function im_addEventWindow(win, o) {
      */
     function _isSizeExceed(type, size) {
         var size_kb = Math.round(size / 1024 * 100) / 100;  // 转换为KB
-        if (type == 'file') {
+        if (type === 'file') {
             return size_kb > IM_CONSTANT.file_maxSize_allowable;
-        } else if (type == 'image') {
+        } else if (type === 'image') {
             return size_kb > IM_CONSTANT.image_maxSize_allowable;
         } else {
             return false;
@@ -1071,7 +1071,7 @@ function im_callBackFile(id, path) {
             uid = members[p].getAttribute('uid');
             username = members[p].getAttribute('username');
             status = members[p].getAttribute('status');
-            status = status == null ? -1 : status;
+            status = status === null ? -1 : status;
             toz.push(uid + IM_CONSTANT.hyphen + username + IM_CONSTANT.hyphen + status);
         }
         to = "<to>" + toz.join(',') + "<to>";
