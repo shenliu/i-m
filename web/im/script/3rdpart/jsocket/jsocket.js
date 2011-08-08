@@ -119,7 +119,7 @@ JSocket.prototype.write = function(data) {
  */
 JSocket.prototype.assertConnected = function() {
     if (!this.connected || !this.movie)
-        throw "JSocket 没连接";
+        throw "JSocket not connected~~";
 };
 
 /**

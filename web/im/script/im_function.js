@@ -281,18 +281,29 @@ function im_confirmDialog(str, options) {
 /**
  * 生成 聊天内容
  * @param o
+ * 例如:
+ *  {
+ *      from: '1###张三疯',
+ *      to: '2###李四###null',
+ *      date: '2011-08-08 09:57:32',
+ *      msg: 'fgfdhg',
+ *      file: '',
+ *      stylz: 'family=隶书&size=22&weight=true&italic=false&underline=false&color=rgb(156, 161, 78)'
+ *  }
  */
 function im_makeChatList(o) {
     var html = [];
 
     var stylez = [];
-    var style = o['stylz'].toString();
-    stylez.push("font-family:" + style.getParamter("family"));
-    stylez.push("font-size:" + style.getParamter("size") + "pt");
-    stylez.push("font-weight:" + (style.getParamter("weight") === "true" ? "bold" : "normal"));
-    stylez.push("font-style:" + (style.getParamter("italic") === "true" ? "italic" : "normal"));
-    stylez.push("text-decoration:" + (style.getParamter("underline") === "true" ? "underline" : "none"));
-    stylez.push("color:" + style.getParamter("color"));
+    if (o['stylz']) {
+        var style = o['stylz'].toString();
+        stylez.push("font-family:" + style.getParamter("family"));
+        stylez.push("font-size:" + style.getParamter("size") + "pt");
+        stylez.push("font-weight:" + (style.getParamter("weight") === "true" ? "bold" : "normal"));
+        stylez.push("font-style:" + (style.getParamter("italic") === "true" ? "italic" : "normal"));
+        stylez.push("text-decoration:" + (style.getParamter("underline") === "true" ? "underline" : "none"));
+        stylez.push("color:" + style.getParamter("color"));
+    }
 
     var from_id = o.from.split(IM_CONSTANT.hyphen)[0];
     var from_name = o.from.split(IM_CONSTANT.hyphen)[1];
@@ -305,7 +316,7 @@ function im_makeChatList(o) {
     html.push(from_name);
     html.push('  <span>' + o.date + '</span>');
     html.push('</dt>');
-    html.push('<dd class="msgBody defaultFontStyle" style="' + stylez.join(';') + '">');
+    html.push('<dd class="msgBody defaultFontStyle" style="' + (stylez.length !== 0 ? stylez.join(';') : '') + '">');
     html.push(o.msg);
     html.push('</dd>');
     html.push('</dl>');

@@ -7,16 +7,16 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ServerHandler extends IoHandlerAdapter {
+    private static final Logger logger = LoggerFactory
+            .getLogger(ServerHandler.class);
+
     /**
      * String: session.getRemoteAddress()
      * Map<String, IoSession>:
@@ -27,13 +27,14 @@ public class ServerHandler extends IoHandlerAdapter {
 
     private final String HYPHEN = "###";
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(ServerHandler.class);
+    //private Operation op = null;
 
     @Override
     public void sessionCreated(IoSession session) throws Exception {
-        InetSocketAddress isa = (InetSocketAddress) session.getRemoteAddress();
+        //InetSocketAddress isa = (InetSocketAddress) session.getRemoteAddress();
         //logger.info("客户端(sessionCreated):" + isa.getAddress().getHostAddress() + ":" + isa.getPort());
+        //ApplicationContext c = new FileSystemXmlApplicationContext("D:/Programme/repository/im/out/WEB-INF/applicationContext.xml");
+        //op = (Operation) c.getBean("im_operation");
     }
 
     @Override
@@ -52,15 +53,14 @@ public class ServerHandler extends IoHandlerAdapter {
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) {
         try {
-            logger.info("客户端(exceptionCaught):" + session.getRemoteAddress() + " 出现错误: " + cause.toString());
+            logger.error("客户端(exceptionCaught):" + session.getRemoteAddress() + " 出现错误: " + cause.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void messageReceived(IoSession session, Object message)
-            throws Exception {
+    public void messageReceived(IoSession session, Object message) throws Exception {
         String msg = message.toString();
         if (msg.equals("")) {
             return;
@@ -138,6 +138,7 @@ public class ServerHandler extends IoHandlerAdapter {
      * @param msg     形如:
      *                <p/>
      *                transfer###<from>1###张三疯###online<from><to>2###李四###online<to><msg>/im/upload/20110805/female.png<msg>
+     * @param session session
      */
     private void transfer(String command, String msg, IoSession session) {
         String from = find("<from>", msg);
@@ -258,12 +259,14 @@ public class ServerHandler extends IoHandlerAdapter {
                 if (to.equals("*")) {
                     sess.write(sb.toString());  // 广播
                 } else {
+                    // 此人是接收者 或 是本人
                     if (Arrays.binarySearch(uids, innerKey) >= 0 || my_id.equals(innerKey)) {
                         sess.write(sb.toString());
                     }
                 }
             }
         }
+
     }
 
     @Override

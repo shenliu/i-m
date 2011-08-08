@@ -29,7 +29,7 @@ function im_callback(data) {
  * @param  {String}  data  消息
  */
 function im_message(data) {
-    //console.log("im_message -> " + data);
+    console.log("im_message -> " + data);
     //alert("im_message -> " + data);
     var web = starfish.web;
 
@@ -910,7 +910,7 @@ function im_addEventWindow(win, o) {
 
                 // 上传错误
                 web.event.addEvent(xhrupload, "error", function(ex) {
-                    console.log("error: " + ex.message);
+                    //console.log("error: " + ex.message);
                 });
 
                 xhr.onreadystatechange = function(evt) {

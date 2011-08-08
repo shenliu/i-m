@@ -359,7 +359,7 @@ function im_memberGroup(gid, gname) {
                 var duty = starfish.xml.getNode(user, 'duty').firstChild;
 
                 if (allMembers.contains(uid)) {
-                    return;   // 已经包换了本uid
+                    return;   // 已经包含了本uid
                 } else {
                     allMembers.push(uid);
                 }

@@ -1,6 +1,7 @@
 package com.dfjq.pojo.im;
 
 import com.dfjq.pojo.im.bean.Group;
+import com.dfjq.pojo.im.bean.OfflineMessage;
 import com.dfjq.pojo.im.dao.ImDao;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Operation {
     public Operation() {
     }
 
+    // 群组
     public boolean addGroup(Group group) {
         return imDao.addGroup(group);
     }
@@ -33,6 +35,19 @@ public class Operation {
 
     public boolean deleteGroup(String gid) {
         return imDao.deleteGroup(gid);
+    }
+
+    // 离线消息
+    public boolean saveOfflineMessage(OfflineMessage om) {
+        return imDao.saveOfflineMessage(om);
+    }
+
+    public List<OfflineMessage> getOfflineMessagesByUid(String uid) {
+        return imDao.getOfflineMessagesByUid(uid);
+    }
+
+    public boolean deleteOfflineMessage(String uid, String date, String time) {
+        return imDao.deleteOfflineMessage(uid, date, time);
     }
 
 }

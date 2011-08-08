@@ -1,8 +1,6 @@
 package com.dfjq.pojo.im.dao.impl;
 
-import com.dfjq.pojo.im.bean.Group;
-import com.dfjq.pojo.im.bean.GroupResultSetExtractor;
-import com.dfjq.pojo.im.bean.GroupRowMapper;
+import com.dfjq.pojo.im.bean.*;
 import com.dfjq.pojo.im.dao.ImDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -67,4 +65,41 @@ public class ImDaoImpl implements ImDao {
         int result = jdbcTemplate.update(sql, gid);
         return result > 0;
     }
+
+    @Override
+    public boolean saveOfflineMessage(OfflineMessage om) {
+        String sql = "insert into bc_im_offlineMessage(om_group_id,om_group_name,om_from_id,om_from_name,om_to_id,om_to_name,om_date,om_time,om_message,om_file_name,om_file_type,om_file_path) " +
+                "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object[] params = new Object[]{
+                om.getGroupId(),
+                om.getGroupName(),
+                om.getFromId(),
+                om.getFromName(),
+                om.getToId(),
+                om.getToName(),
+                om.getDate(),
+                om.getTime(),
+                om.getMessage(),
+                om.getFileName(),
+                om.getFileType(),
+                om.getFilePath()
+        };
+        int result = jdbcTemplate.update(sql, params);
+        return result > 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<OfflineMessage> getOfflineMessagesByUid(String uid) {
+        String sql = "select * from bc_im_offlineMessage where om_to_id='" + uid + "' order by om_date,om_time desc";
+        return jdbcTemplate.query(sql, new OfflineMessageRowMapper());
+    }
+
+    @Override
+    public boolean deleteOfflineMessage(String uid, String date, String time) {
+        String sql = "delete from bc_im_offlineMessage where om_to_id=? and om_date=? and om_time=?";
+        int result = jdbcTemplate.update(sql, uid, date, time);
+        return result > 0;
+    }
+
 }
