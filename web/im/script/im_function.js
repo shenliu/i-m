@@ -595,7 +595,7 @@ function im_chgState(data) {
 function im_transferFile(data) {
     var web = starfish.web;
     //console.log(data);
-    var obj = eval("(" + data + ")");
+    var obj = JSON.parse("(" + data + ")");
 
     var id = obj['from'].split(IM_CONSTANT.hyphen)[0]; // 有可能是gid
     var uid = null, gid = null;

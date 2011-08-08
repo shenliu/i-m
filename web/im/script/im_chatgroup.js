@@ -169,7 +169,7 @@ function im_genGroupChatWindow(container) {
 
         var url = IM_CONSTANT.servlet_path + "im/getgroupbygid?gid=" + gid;
         web.ajax.get(encodeURI(url), function(result) {
-            var o = eval("(" + result.trim() + ")");
+            var o = JSON.parse("(" + result.trim() + ")");
             var s_member = o['member'];
             s_member = s_member.substring(1, s_member.length - 1);
             var members = s_member.split(",");
@@ -285,7 +285,7 @@ function im_group_message(data) {
     //console.log(data);
     var web = starfish.web;
 
-    var obj = eval("(" + data + ")");
+    var obj = JSON.parse("(" + data + ")");
     /*
      * 窗口 判断各方是否打开了此窗口 id为 window_group_gid
      */

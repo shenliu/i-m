@@ -151,7 +151,7 @@ function im_displayGroup() {
         // 清除原有列表
         group_list_inner.innerHTML = "";
 
-        var o = eval("(" + result.trim() + ")");
+        var o = JSON.parse("(" + result.trim() + ")");
         _order(o);
         var html = [];
         for (var i = 0; i < o.length; i++) {
@@ -426,7 +426,7 @@ function im_memberGroup(gid, gname) {
     // ajax查询这个群组已经包含的成员
     var url = IM_CONSTANT.servlet_path + "/im/getgroupbygid?gid=" + gid;
     web.ajax.get(encodeURI(url), function(result) {
-        var o = eval("(" + result.trim() + ")");
+        var o = JSON.parse("(" + result.trim() + ")");
         var members = o['member'];
         var im_member_list = web.className('im_member_list')[0];
         var lis = $$(im_member_list, 'li');

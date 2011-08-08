@@ -33,7 +33,7 @@ function im_message(data) {
     //alert("im_message -> " + data);
     var web = starfish.web;
 
-    var obj = eval("(" + data + ")");
+    var obj = JSON.parse("(" + data + ")");
     /*
      * 窗口 判断各方是否打开了此窗口 id为 window_from_to
      */
@@ -114,7 +114,7 @@ function im_displayTips(parent) {
         im_showBox(_gen(), 'hasMessage');
     } else {  // 已经接收过
         var content = web.className('tcontent', tbox)[0];
-        if (content.innerHTML.trim() == "") {  // 没有提示正在显示
+        if (content.innerHTML.trim() === "") {  // 没有提示正在显示
             im_showBox(_gen(), 'hasMessage');
         } else {  // 有消息正在显示
             var spans = $$(content, 'span');
@@ -128,13 +128,13 @@ function im_displayTips(parent) {
 
             if (sp) {  // 有此用户发来的消息提示正在显示 只是简单的数字+1
                 var strong = $$(sp, 'strong')[0];
-                var n = parseInt(strong.innerHTML);
+                var n = parseInt(strong.innerHTML, 10);
                 strong.innerHTML = ++n;
             } else {  // 没有次用户的消息提示 只是增加一行新的提示就可以了
                 var s = _gen();
                 web.dom.insert(content, web.dom.parseDOM(s)[0]);
                 var message = $('hasMessage');
-                var h = parseInt(web.css(message, 'height'));
+                var h = parseInt(web.css(message, 'height'), 10);
                 web.css(message, 'height', (h + 22) + 'px');
             }
         }
@@ -264,7 +264,7 @@ function im_genChatWindow(container) {
 
         function _event(e) {
             // 正在上传文件 不能发送消息
-            if (win.getAttribute('uploading') != null && win.getAttribute('uploading') === true) {
+            if (win.getAttribute('uploading') !== null && win.getAttribute('uploading') === true) {
                 im_showBox('有文件正在上传，请等待上传结束后再发送消息。', 'hasAttention', 5);
                 return;
             }
@@ -331,7 +331,7 @@ function im_genChatWindow(container) {
             }
             web.dom.dispose(sp); // 去除<span>
             var message = $('hasMessage');
-            var h = parseInt(web.css(message, 'height'));
+            var h = parseInt(web.css(message, 'height'), 10);
             web.css(message, 'height', (h - 22) + 'px');
 
             if (content.innerHTML.trim() === "") { // 没有内容了则 隐藏tbox
@@ -409,18 +409,18 @@ function im_genWindowBody(win, o, type) {
     html.push('                <select class="fontFamily">');
     for (var i = 0; i < IM_CONSTANT.fonts.length; i++) {
         var f = IM_CONSTANT.fonts[i];
-        html.push('<option value="' + f + '" '
-                + (f == IM_CONSTANT.user_stylez.family ? 'selected="selected"' : '') + '>'
-                + f + '</option>');
+        html.push('<option value="' + f + '" ' +
+                (f == IM_CONSTANT.user_stylez.family ? 'selected="selected"' : '') + '>' +
+                f + '</option>');
     }
     html.push('                </select>');
     html.push('            </li>');
     html.push('            <li>');
     html.push('                <select class="fontSize">');
     for (var s = 8; s <= 22; s++) {
-        html.push('<option value="' + s + '" '
-                + (s == IM_CONSTANT.user_stylez.size ? 'selected="selected"' : '') + '>'
-                + s + '</option>');
+        html.push('<option value="' + s + '" ' +
+                (s == IM_CONSTANT.user_stylez.size ? 'selected="selected"' : '') + '>' +
+                s + '</option>');
     }
     html.push('                </select>');
     html.push('            </li>');
@@ -561,12 +561,12 @@ function im_addEventWindow(win, o) {
         if (resizing) {
             var dy = web.window.mouseY(e) - ey;
 
-            var b2 = parseInt(web.css(chat_body_toolbar_top, 'bottom'));
-            var b3 = parseInt(web.css(chat_body_toolbar, 'bottom'));
-            var b5 = parseInt(web.css(chat_body_editor_toolbar, 'bottom'));
+            var b2 = parseInt(web.css(chat_body_toolbar_top, 'bottom'), 10);
+            var b3 = parseInt(web.css(chat_body_toolbar, 'bottom'), 10);
+            var b5 = parseInt(web.css(chat_body_editor_toolbar, 'bottom'), 10);
 
-            var h1 = parseInt(web.css(chat_body_chatboard, 'height'));
-            var h4 = parseInt(web.css(chat_body_inputbox, 'height'));
+            var h1 = parseInt(web.css(chat_body_chatboard, 'height'), 10);
+            var h4 = parseInt(web.css(chat_body_inputbox, 'height'), 10);
 
             if (h4 - dy > 20 && h4 - dy < 150) {   // 最小高20px 最大150px
                 web.css(chat_body_chatboard, 'height', (h1 + dy) + 'px');
@@ -655,8 +655,9 @@ function im_addEventWindow(win, o) {
     var bold = web.className('bold', win)[0];
     bold = web.dom.parent(bold);
     web.event.addEvent(bold, 'click', function() {
+        var weight;
         if (web.hasClass(bold, 'selected')) {
-            var weight = false;
+            weight = false;
             web.removeClass(bold, 'selected');
         } else {
             weight = true;
@@ -672,8 +673,9 @@ function im_addEventWindow(win, o) {
     var italic = web.className('italic', win)[0];
     italic = web.dom.parent(italic);
     web.event.addEvent(italic, 'click', function() {
+        var italian;
         if (web.hasClass(italic, 'selected')) {
-            var italian = false;
+            italian = false;
             web.removeClass(italic, 'selected');
         } else {
             italian = true;
@@ -689,8 +691,9 @@ function im_addEventWindow(win, o) {
     var underline = web.className('underline', win)[0];
     underline = web.dom.parent(underline);
     web.event.addEvent(underline, 'click', function() {
+        var under;
         if (web.hasClass(underline, 'selected')) {
-            var under = false;
+            under = false;
             web.removeClass(underline, 'selected');
         } else {
             under = true;
@@ -836,22 +839,22 @@ function im_addEventWindow(win, o) {
             e.preventDefault();
             var callback, w;
             var files = e.dataTransfer.files;
-            for (var i = 0, f; f = files[i]; i++) {
+            for (var i = 0, f = null; f = files[i]; i++) {
                 if (f.size === 0 || f.size === 4096) {  // 上传的是 文件夹 或大小为0的文件 chrome的文件夹size为4096
                     im_showWarningTips(win, "提示：请上传文件。如要上传文件夹请先压缩为文件。");
                     continue;
                 }
                 if (_isImage(f.name)) {  // 图片
                     if (_isSizeExceed('image', f.size)) {  // 大小超过规定
-                        im_showWarningTips(win, "提示：上传的图片请小于 "
-                                + (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
+                        im_showWarningTips(win, "提示：上传的图片请小于 " +
+                                (IM_CONSTANT.image_maxSize_allowable / 1024) + " Mb。");
                         return;
                     }
                     callback = "im_callBackPic";
                 } else {   // 文件
                     if (_isSizeExceed('file', f.size)) {  // 大小超过规定
-                        im_showWarningTips(win, "提示：上传的文件请小于 "
-                                + (IM_CONSTANT.file_maxSize_allowable / 1024) + " Mb。");
+                        im_showWarningTips(win, "提示：上传的文件请小于 " +
+                                (IM_CONSTANT.file_maxSize_allowable / 1024) + " Mb。");
                         return;
                     }
                     callback = "im_callBackFile";
@@ -937,7 +940,7 @@ function im_addEventWindow(win, o) {
                 if (xhr.readyState == 4) {
                     if (xhr.status == 200) {
                         var result = xhr.responseText;
-                        var o = eval('(' + result + ')');
+                        var o = JSON.parse('(' + result + ')');
                         var fn = o['fn'];
                         var param = o['param'];
                         fn.apply(null, param);
@@ -976,11 +979,11 @@ function im_addEventWindow(win, o) {
     // 解决ie下 回车 添加<p>的讨厌问题~~ 恨死ie!!!
     if (starfish.client.browser.ie) {
         web.event.addEvent(chat_body_inputbox_rich_editor_div, 'keypress', function(e) {
-            if (e.keyCode == 13) {  // 替换 回车
+            if (e.keyCode === 13) {  // 替换 回车
                 var sel = this.document.selection;
-                if (sel != null) {
+                if (sel !== null) {
                     var rng = sel.createRange();
-                    if (rng != null) {
+                    if (rng !== null) {
                         rng.pasteHTML("<br /><!-- -->"); // 这儿还必须添加一个标签!! 晕~~~
                     }
                 }
@@ -1042,11 +1045,12 @@ function im_callBackFile(id, path) {
     var win = $(id);
 
     var command = IM_CONSTANT.command.transfer;
+    var de;
     if (id.match(/^window_group/)) {  // 群组
         var offset = id.lastIndexOf('_') + 1;
         var gid = id.slice(offset);
         var chat_username = web.className('chat_username', win)[0];
-        var de = gid + IM_CONSTANT.hyphen + chat_username.getAttribute('title');
+        de = gid + IM_CONSTANT.hyphen + chat_username.getAttribute('title');
     } else {  //  单聊
         de = IM_CONSTANT.myself_id + IM_CONSTANT.hyphen + IM_CONSTANT.myself_name;
     }
