@@ -38,8 +38,12 @@ public class Operation {
     }
 
     // 离线消息
-    public boolean saveOfflineMessage(OfflineMessage om) {
-        return imDao.saveOfflineMessage(om);
+    public boolean addOfflineMessage(OfflineMessage om) {
+        return imDao.addOfflineMessage(om);
+    }
+
+    public boolean addOfflineMessages(List<OfflineMessage> oms) {
+        return  imDao.addOfflineMessages(oms);
     }
 
     public List<OfflineMessage> getOfflineMessagesByUid(String uid) {

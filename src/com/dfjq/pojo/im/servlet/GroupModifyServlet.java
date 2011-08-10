@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddGroupServlet extends HttpServlet {
+public class GroupModifyServlet extends HttpServlet {
     Operation op = null;
 
     @Override
@@ -35,15 +35,20 @@ public class AddGroupServlet extends HttpServlet {
         String gid = request.getParameter("gid");
         String uid = request.getParameter("uid");  // 创建者
         String gname = request.getParameter("gname");
-        String a = new String(gname.getBytes("iso-8859-1"), "utf-8");
         String gdesc = request.getParameter("gdesc");
+        String members = request.getParameter("member");
 
-        boolean flag;
+        boolean flag = false;
 
         if (gid != null) { // 修改
             Group group = op.getGroupByGid(gid);
-            group.setName(gname);
-            group.setDesc(gdesc);
+            if (gname != null) {
+                group.setName(gname);
+                group.setDesc(gdesc);
+            }
+            if (members != null) {  // 成员维护也用此servlet
+                group.setMember(members);
+            }
             flag = op.updateGroup(group);
         } else {  // 新建
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");

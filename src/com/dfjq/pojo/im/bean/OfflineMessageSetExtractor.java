@@ -21,6 +21,7 @@ public class OfflineMessageSetExtractor implements ResultSetExtractor {
             om.setDate(resultSet.getString("om_date"));
             om.setTime(resultSet.getString("om_time"));
             om.setMessage(resultSet.getString("om_message"));
+            om.setStyle(resultSet.getString("om_style"));
             om.setFileName(resultSet.getString("om_file_name"));
             om.setFileType(resultSet.getString("om_file_type"));
             om.setFilePath(resultSet.getString("om_file_path"));

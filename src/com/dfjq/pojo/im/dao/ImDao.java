@@ -18,7 +18,9 @@ public interface ImDao {
     public boolean deleteGroup(String gid);
 
     // 离线消息
-    public boolean saveOfflineMessage(OfflineMessage om);
+    public boolean addOfflineMessage(OfflineMessage om);
+
+    public boolean addOfflineMessages(List<OfflineMessage> oms);
 
     public List<OfflineMessage> getOfflineMessagesByUid(String uid);
 

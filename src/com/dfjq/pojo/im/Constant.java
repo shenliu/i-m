@@ -6,4 +6,6 @@ public abstract class Constant {
 
     // 上传文件的最大允许尺寸
     public static final int MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+    public  static final String HYPHEN = "###";
 }

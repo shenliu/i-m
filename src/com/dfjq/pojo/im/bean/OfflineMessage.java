@@ -11,6 +11,7 @@ public class OfflineMessage {
     private String date;
     private String time;
     private String message;
+    private String style;
     private String fileName;
     private String fileType;
     private String filePath;
@@ -93,6 +94,14 @@ public class OfflineMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     public String getFileName() {

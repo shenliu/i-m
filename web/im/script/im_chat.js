@@ -1,5 +1,5 @@
 function im_callback(data) {
-    // console.log("back -> " + data);
+    console.log("back -> " + data);
     var offset = data.indexOf(IM_CONSTANT.hyphen);
     var command = data.substring(0, offset);
     var result = data.substring(offset + IM_CONSTANT.hyphen.length);
@@ -19,6 +19,9 @@ function im_callback(data) {
         case IM_CONSTANT.command.transfer:
             im_transferFile(result);
             break;
+        case IM_CONSTANT.command.offline:
+            im_offlineMessage(result);
+            break;
         default:
             break;
     }
@@ -29,7 +32,7 @@ function im_callback(data) {
  * @param  {String}  data  消息
  */
 function im_message(data) {
-    console.log("im_message -> " + data);
+    //console.log("im_message -> " + data);
     //alert("im_message -> " + data);
     var web = starfish.web;
 
@@ -1086,4 +1089,101 @@ function im_callBackFile(id, path) {
 
     // 窗口 uploading 属性置为false, 则可以发送消息了
     win.setAttribute('uploading', false);
+}
+
+/**
+ * 离线
+ * @param data
+ * 例如:
+ * 消息和图片:
+ * {from:'1###张三疯',to:'2###李四###null',date:'2011-08-09 11:05:33',msg:'ryutry',stylz:'family=宋体&size=10&weight=false&italic=false&underline=false&color=#000000',user:[2]}
+ * {from:'1###张三疯###e7d6ab20f363a6f8783f2e022c5ff133',to:'1###张三疯###1,2###李四###null,3###王五###null,4###赵六儿###null,5###马七###null,6###猴八###null',date:'2011-08-09 11:06:12',msg:'we34',stylz:'family=宋体&size=10&weight=false&italic=false&underline=false&color=#000000',user:[2, 3, 4, 5, 6]}
+ * {from:'1###张三疯',to:'2###李四###null',date:'2011-08-09 15:21:25',msg:'<img src="/im/upload/20110809/female.png">',stylz:'family=宋体&size=10&weight=false&italic=false&underline=false&color=#000000',user:[2]}
+ * 文件:
+ * {from:'e7d6ab20f363a6f8783f2e022c5ff133###all',to:'1###张三疯###1,2###李四###-1,3###王五###-1,4###赵六儿###-1,5###马七###-1,6###猴八###-1',date:'2011-08-09 15:01:56',file:'/im/upload/20110809/myface.jpg'}
+ * {from:'1###张三疯',to:'2###李四###',date:'2011-08-09 15:15:40',file:'/im/upload/20110809/members_2.png'}
+ */
+function im_offlineMessage(data) {
+    console.log(data);
+    var web = starfish.web;
+
+    var obj = eval("(" + data + ")");
+
+    var file = obj['file'];
+    var fileName = "", filePath = "", fileType = "";
+
+    var from = obj['from'], from_id, from_name;
+    var gid = "", gname = "";
+    if (file) {  // 传输文件
+        filePath = file;
+        var offset = file.lastIndexOf("/") + 1;
+        fileName = file.slice(offset);
+        offset = file.lastIndexOf(".");
+        if (offset != -1) {
+            fileType = file.slice(offset + 1);
+        }
+        //console.log(filePath + "-" + fileName + "-" + fileType);
+
+        from_id = from.split(IM_CONSTANT.hyphen)[0];
+        from_name = from.split(IM_CONSTANT.hyphen)[1];
+        if (from_id.length === 32) {   // 暂时用这种方法区分 是否uid和gid
+            gid = from_id;
+            gname = from_name;
+        }
+    } else {
+        from_id = from.split(IM_CONSTANT.hyphen)[0];
+        from_name = from.split(IM_CONSTANT.hyphen)[1];
+        if (from.split(IM_CONSTANT.hyphen)[2]) {
+            gid = from.split(IM_CONSTANT.hyphen)[2];
+            var container = im_findByUid('group', gid);
+            gname = container.getAttribute('gname');
+        }
+    }
+
+    var user = obj['user'];
+    var to;
+    if (user) {  // 消息和图片
+        to = user.join(',');
+    } else {  // 文件
+        to = obj['to'];
+        var tos = to.split(',');
+        var arr = [];
+        for (var i = 0; i < tos.length; i++) {
+            var t = tos[i];
+            var uid = t.split(IM_CONSTANT.hyphen)[0];
+            if (uid !== IM_CONSTANT.myself_id) {  // 不是自己
+                arr.push(uid);
+            }
+        }
+        to = arr.join(',');
+    }
+
+    var sDate = obj['date'];
+    var date = sDate.split(/\s/)[0].replace(/-/g, '');
+    var time = sDate.split(/\s/)[1].replace(/:/g, '');
+
+    var msg = obj['msg'] ? obj['msg'] : "";
+    var stylz = obj['stylz'] ? obj['stylz'] : "";
+
+    var url = IM_CONSTANT.servlet_path + "im/offlinemessageadd";
+    var param = {
+        from_id: from_id,
+        from_name: from_name,
+        gid: gid,
+        gname: gname,
+        to: to,
+        date: date,
+        time: time,
+        msg: msg,
+        stylz: stylz,
+        file_name: fileName,
+        file_type: fileType,
+        file_path: filePath
+    };
+    web.ajax.post(encodeURI(url), param, function(result) {
+        if (result.trim() === 'true') {
+            alert("111~~~");
+        }
+    }, null);
+
 }

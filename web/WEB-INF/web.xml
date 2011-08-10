@@ -18,10 +18,11 @@
     </listener>
 
     <!-- ====================================== -->
+
     <servlet>
         <description>添加群组</description>
         <servlet-name>modifyGroup</servlet-name>
-        <servlet-class>com.dfjq.pojo.im.servlet.ModifyGroupServlet</servlet-class>
+        <servlet-class>com.dfjq.pojo.im.servlet.GroupModifyServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -34,7 +35,7 @@
     <servlet>
         <description>按uid查找群组</description>
         <servlet-name>getGroupsByUid</servlet-name>
-        <servlet-class>com.dfjq.pojo.im.servlet.GetGroupsByUidServlet</servlet-class>
+        <servlet-class>com.dfjq.pojo.im.servlet.GroupGetByUidServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -47,7 +48,7 @@
     <servlet>
         <description>按gid查找群组</description>
         <servlet-name>getGroupByGid</servlet-name>
-        <servlet-class>com.dfjq.pojo.im.servlet.GetGroupByGidServlet</servlet-class>
+        <servlet-class>com.dfjq.pojo.im.servlet.GroupGetByGidServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -60,7 +61,7 @@
     <servlet>
         <description>删除群组</description>
         <servlet-name>deleteGroup</servlet-name>
-        <servlet-class>com.dfjq.pojo.im.servlet.DeleteGroupServlet</servlet-class>
+        <servlet-class>com.dfjq.pojo.im.servlet.GroupDeleteServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -72,12 +73,12 @@
 
     <servlet>
         <description>表单文件上传</description>
-        <servlet-name>fileuploadform</servlet-name>
+        <servlet-name>fileUploadForm</servlet-name>
         <servlet-class>com.dfjq.pojo.im.servlet.FileUploadFormServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>fileuploadform</servlet-name>
+        <servlet-name>fileUploadForm</servlet-name>
         <url-pattern>/im/fileuploadform</url-pattern>
     </servlet-mapping>
 
@@ -85,12 +86,12 @@
 
     <servlet>
         <description>拖拽文件上传</description>
-        <servlet-name>fileuploaddd</servlet-name>
+        <servlet-name>fileUploadDD</servlet-name>
         <servlet-class>com.dfjq.pojo.im.servlet.FileUploadDDServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>fileuploaddd</servlet-name>
+        <servlet-name>fileUploadDD</servlet-name>
         <url-pattern>/im/fileuploaddd</url-pattern>
     </servlet-mapping>
 
@@ -98,13 +99,52 @@
 
     <servlet>
         <description>文件下载</description>
-        <servlet-name>filedownload</servlet-name>
+        <servlet-name>fileDownload</servlet-name>
         <servlet-class>com.dfjq.pojo.im.servlet.FileDownloadServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>filedownload</servlet-name>
+        <servlet-name>fileDownload</servlet-name>
         <url-pattern>/im/filedownload</url-pattern>
+    </servlet-mapping>
+
+    <!-- ====================================== -->
+
+    <servlet>
+        <description>添加离线消息</description>
+        <servlet-name>offlineMessageAdd</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.OfflineMessageAddServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>offlineMessageAdd</servlet-name>
+        <url-pattern>/im/offlinemessageadd</url-pattern>
+    </servlet-mapping>
+
+    <!-- ====================================== -->
+
+    <servlet>
+        <description>按uid查找离线消息</description>
+        <servlet-name>offlineMessageGetByUid</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.OfflineMessageGetByUidServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>offlineMessageGetByUid</servlet-name>
+        <url-pattern>/im/offlinemessagegetbyuid</url-pattern>
+    </servlet-mapping>
+
+    <!-- ====================================== -->
+
+    <servlet>
+        <description>删除离线消息</description>
+        <servlet-name>OfflineMessageDelete</servlet-name>
+        <servlet-class>com.dfjq.pojo.im.servlet.OfflineMessageDeleteServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OfflineMessageDelete</servlet-name>
+        <url-pattern>/im/offlinemessagedelete</url-pattern>
     </servlet-mapping>
 
 </web-app>

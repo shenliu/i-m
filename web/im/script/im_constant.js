@@ -69,5 +69,6 @@ IM_CONSTANT.command = {
     group: 'group',
     broadcast: 'broadcast',
     transfer: 'transfer',
+    offline: 'offline', // 离线消息
     status: IM_CONSTANT.user_status
 };

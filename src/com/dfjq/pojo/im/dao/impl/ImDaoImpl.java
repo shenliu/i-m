@@ -2,9 +2,12 @@ package com.dfjq.pojo.im.dao.impl;
 
 import com.dfjq.pojo.im.bean.*;
 import com.dfjq.pojo.im.dao.ImDao;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ImDaoImpl implements ImDao {
@@ -67,9 +70,9 @@ public class ImDaoImpl implements ImDao {
     }
 
     @Override
-    public boolean saveOfflineMessage(OfflineMessage om) {
-        String sql = "insert into bc_im_offlineMessage(om_group_id,om_group_name,om_from_id,om_from_name,om_to_id,om_to_name,om_date,om_time,om_message,om_file_name,om_file_type,om_file_path) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+    public boolean addOfflineMessage(OfflineMessage om) {
+        String sql = "insert into bc_im_offlineMessage(om_group_id,om_group_name,om_from_id,om_from_name,om_to_id,om_to_name,om_date,om_time,om_message,om_style,om_file_name,om_file_type,om_file_path) " +
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] params = new Object[]{
                 om.getGroupId(),
                 om.getGroupName(),
@@ -80,6 +83,7 @@ public class ImDaoImpl implements ImDao {
                 om.getDate(),
                 om.getTime(),
                 om.getMessage(),
+                om.getStyle(),
                 om.getFileName(),
                 om.getFileType(),
                 om.getFilePath()
@@ -89,10 +93,40 @@ public class ImDaoImpl implements ImDao {
     }
 
     @Override
+    public boolean addOfflineMessages(final List<OfflineMessage> oms) {
+        String sql = "insert into bc_im_offlineMessage(om_group_id,om_group_name,om_from_id,om_from_name,om_to_id,om_to_name,om_date,om_time,om_message,om_style,om_file_name,om_file_type,om_file_path) " +
+                "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        int[] result = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                OfflineMessage om = oms.get(i);
+                ps.setString(1, om.getGroupId());
+                ps.setString(2, om.getGroupName());
+                ps.setString(3, om.getFromId());
+                ps.setString(4, om.getFromName());
+                ps.setString(5, om.getToId());
+                ps.setString(6, om.getToName());
+                ps.setString(7, om.getDate());
+                ps.setString(8, om.getTime());
+                ps.setString(9, om.getMessage());
+                ps.setString(10, om.getStyle());
+                ps.setString(11, om.getFileName());
+                ps.setString(12, om.getFileType());
+                ps.setString(13, om.getFilePath());
+            }
+
+            public int getBatchSize() {
+                return oms.size();
+            }
+        });
+        return result[0] > 0;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public List<OfflineMessage> getOfflineMessagesByUid(String uid) {
-        String sql = "select * from bc_im_offlineMessage where om_to_id='" + uid + "' order by om_date,om_time desc";
-        return jdbcTemplate.query(sql, new OfflineMessageRowMapper());
+        String sql = "select * from bc_im_offlineMessage where om_to_id=? order by om_date,om_time desc";
+        return (List<OfflineMessage>) jdbcTemplate.query(sql, new Object[]{uid}, new OfflineMessageRowMapper());
     }
 
     @Override

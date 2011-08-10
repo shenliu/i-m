@@ -2,7 +2,6 @@ package com.dfjq.pojo.im.servlet;
 
 import com.dfjq.pojo.im.Operation;
 import com.dfjq.pojo.im.bean.Group;
-import com.dfjq.pojo.im.util.RandomGUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -13,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
-public class ModifyGroupServlet extends HttpServlet {
+public class GroupGetByUidServlet extends HttpServlet {
     Operation op = null;
 
     @Override
@@ -32,39 +30,30 @@ public class ModifyGroupServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter();
 
-        String gid = request.getParameter("gid");
-        String uid = request.getParameter("uid");  // 创建者
-        String gname = request.getParameter("gname");
-        String gdesc = request.getParameter("gdesc");
-        String members = request.getParameter("member");
-
-        boolean flag = false;
-
-        if (gid != null) { // 修改
-            Group group = op.getGroupByGid(gid);
-            if (gname != null) {
-                group.setName(gname);
-                group.setDesc(gdesc);
+        String uid = request.getParameter("uid");
+        List groups = op.getGroupsByUid(uid);
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < groups.size(); i++) {
+            Group g = (Group) groups.get(i);
+            sb.append("{gid:'");
+            sb.append(g.getGid());
+            sb.append("',gname:'");
+            sb.append(g.getName());
+            sb.append("',desc:'");
+            sb.append(g.getDesc());
+            sb.append("',date:'");
+            sb.append(g.getDate());
+            sb.append("',creator:'");
+            sb.append(g.getCreator());
+            sb.append("',member:'");
+            sb.append(g.getMember());
+            sb.append("'}");
+            if (i != groups.size() - 1) {
+                sb.append(",");
             }
-            if (members != null) {  // 成员维护也用此servlet
-                group.setMember(members);
-            }
-            flag = op.updateGroup(group);
-        } else {  // 新建
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            String date = sdf.format(new Date());
-
-            Group group = new Group();
-            group.setName(gname);
-            group.setDesc(gdesc);
-            group.setGid(new RandomGUID(true).getValueAfterMD5());
-            group.setCreator(uid);
-            group.setDate(date);
-            group.setMember(uid);
-
-            flag = op.addGroup(group);
         }
-        out.println(flag);
+        sb.append("]");
+        out.println(sb.toString());
         out.flush();
         out.close();
     }
@@ -72,5 +61,4 @@ public class ModifyGroupServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
-
 }
