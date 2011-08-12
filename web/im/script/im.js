@@ -198,6 +198,9 @@ starfish.web.event.addEvent(window, 'load', function(){
 
     // 表情初始化
     im_face();
+
+    // 离线消息显示
+    im_getOfflineMessage();
 });
 
 /**

@@ -691,3 +691,51 @@ function im_showBox(str, clazz, hide) {
     };
     starfish.toolkit.box.show(options);
 }
+
+/**
+ * 登录时 查看是否有离线消息 若有则显示
+ */
+function im_getOfflineMessage() {
+    if (!IM_CONSTANT.offlineMessageEnabled) {
+        return;
+    }
+    var web = starfish.web;
+    var url = IM_CONSTANT.servlet_path + "im/offlinemessagegetbyuid?uid=" + IM_CONSTANT.myself_id;
+    web.ajax.get(encodeURI(url), function(result) {
+        var obj = eval('(' + result + ')');
+        var len = obj.length;
+        if (len === 0) { // 没有离线消息
+            return;
+        }
+
+        var win = im_window({
+            id: 'window_offlineMessage',
+            clazz: {
+                width: '480px',
+                height: '380px',
+                left: (web.window.docWidth() - 450) / 2 + 'px',
+                top: (web.window.docHeight() - 400) / 2 + 'px',
+                'z-index': 25
+            }
+        });
+
+        // title
+        var html = [];
+        html.push('<div class="chat_userinfo_area">');
+        html.push('  <a class="chat_username titleText" href="#">');
+        html.push('    <span>您有<b>' + len + '个离线消息</b></span>');
+        html.push('  </a>');
+        html.push('</div>');
+        var window_title = web.className('window_title titleText', win)[0];
+        window_title.innerHTML = html.join('');
+
+        // 关闭事件 右上角X
+        var window_close = web.className('window_close', win)[0];
+        web.event.addEvent(window_close, 'click', function() {
+            web.dom.dispose(win);
+        });
+
+
+
+    }, {});
+}

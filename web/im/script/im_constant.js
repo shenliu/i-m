@@ -61,6 +61,7 @@ var IM_CONSTANT = {
     online_message: {},  // 在线消息队列
     online_message_shake: {}, // 在线消息用户头像晃动
 
+    offlineMessageEnabled: true,  // 设定离线消息是否可用
     offline_message: {} // 不在线时的消息队列
 };
 

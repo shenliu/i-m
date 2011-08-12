@@ -1104,6 +1104,9 @@ function im_callBackFile(id, path) {
  * {from:'1###张三疯',to:'2###李四###',date:'2011-08-09 15:15:40',file:'/im/upload/20110809/members_2.png'}
  */
 function im_offlineMessage(data) {
+    if (!IM_CONSTANT.offlineMessageEnabled) {
+        return;
+    }
     console.log(data);
     var web = starfish.web;
 
@@ -1182,7 +1185,7 @@ function im_offlineMessage(data) {
     };
     web.ajax.post(encodeURI(url), param, function(result) {
         if (result.trim() === 'true') {
-            alert("111~~~");
+            // 不做什么~~
         }
     }, null);
 
