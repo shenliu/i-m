@@ -10,7 +10,7 @@ create table bc_im_group(
 );
 
 -- 离线消息存储
-drop table bc_im_offlineMessage
+--drop table bc_im_offlineMessage
 create table bc_im_offlineMessage(
     om_id int identity(1,1) primary key,
     om_group_id varchar(50), --群组id

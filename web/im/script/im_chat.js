@@ -1,5 +1,5 @@
 function im_callback(data) {
-    console.log("back -> " + data);
+    console.log("callback -> " + data);
     var offset = data.indexOf(IM_CONSTANT.hyphen);
     var command = data.substring(0, offset);
     var result = data.substring(offset + IM_CONSTANT.hyphen.length);
@@ -1107,7 +1107,7 @@ function im_offlineMessage(data) {
     if (!IM_CONSTANT.offlineMessageEnabled) {
         return;
     }
-    console.log(data);
+    console.log("offlineMessage add to DB -> " + data);
     var web = starfish.web;
 
     var obj = eval("(" + data + ")");

@@ -702,6 +702,9 @@ function im_getOfflineMessage() {
     var web = starfish.web;
     var url = IM_CONSTANT.servlet_path + "im/offlinemessagegetbyuid?uid=" + IM_CONSTANT.myself_id;
     web.ajax.get(encodeURI(url), function(result) {
+        if (result.trim() === "") {
+            return;
+        }
         var obj = eval('(' + result + ')');
         var len = obj.length;
         if (len === 0) { // 没有离线消息
@@ -735,7 +738,7 @@ function im_getOfflineMessage() {
             web.dom.dispose(win);
         });
 
-
+        // todo
 
     }, {});
 }
